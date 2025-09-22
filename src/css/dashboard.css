@@ -1,0 +1,69 @@
+@import "tailwindcss";
+
+.dashMain {
+    display: grid;
+    grid-template-columns: 0.4fr 2fr;
+    height: 100dvh;
+    width: 100%;
+    overflow: hidden;
+}
+.dashSidebar {
+    background-image: linear-gradient(to right, #010029, #020137);
+}
+.adminStat {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    font-size: 13px;
+}
+.dashMenu {
+    padding: 15px 10px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+.dashMenu:hover {
+    border-left: 2px solid rgb(0, 255, 0);
+    background-color: black;
+    transition: all 0.5s ease-in-out;
+}
+.dashToggle {
+    background-image: linear-gradient(to right, #010029, #020137);
+    border-bottom-right-radius: 5px;
+}
+.dashCardDetail1:hover, .dashCardDetail2:hover, .dashCardDetail3:hover, .dashCardDetail4:hover {
+    transition: all 0.5s ease-in-out;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+.dashCardDetail1:hover {
+    background-color: rgb(81, 255, 81);
+}
+.dashCardDetail2:hover {
+    background-color: rgb(255, 193, 193);
+}
+.dashCardDetail3:hover {
+    background-color: rgb(255, 249, 140);
+}
+.dashCardDetail4:hover {
+    background-color: rgb(193, 225, 255);
+}
+.dashCardFoot1:hover, .dashCardFoot2:hover, .dashCardFoot3:hover, .dashCardFoot4:hover {
+    transition: all 0.5s ease-in-out;
+}
+.dashCardFoot1:hover {
+    background-color: rgb(0, 83, 0);
+}
+.dashCardFoot2:hover {
+    background-color: rgb(83, 0, 0);
+}
+.dashCardFoot3:hover {
+    background-color: rgb(67, 46, 0);
+}
+.dashCardFoot4:hover {
+    background-color: rgb(1, 46, 74);
+}
+#dashClose {
+    display: none;
+}

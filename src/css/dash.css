@@ -1,0 +1,56 @@
+#page_loader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100%;
+    background-color: white;
+    z-index: 1;
+}
+.resultTable {
+    width: 100%;
+    height: 460px;
+}
+hr {
+    background-color: rgb(204, 204, 204);
+    border: none;
+    height: 1px;
+}
+.partyDiv {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+}
+.barDiv {
+  height: 400px;
+  position: relative;
+  width: 40%;
+}
+.pLogo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+.barMain {
+  position: absolute;
+  bottom: 0;
+  margin-left: 0px;
+  height: 0%;
+  border-radius: 5px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  transition: 2s ease-in-out height;
+}
+.barAnimate {
+  animation: grow 2s ease-in-out forwards;
+  position: absolute;
+  bottom: 0;
+  height: 0%;
+  border-radius: 5px;
+}
+.barMain:nth-child(odd) {
+  background-image: linear-gradient(to bottom, #002403, #a07500, rgb(43, 4, 4));
+}

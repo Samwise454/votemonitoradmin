@@ -1,0 +1,12 @@
+#messageDiv {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+.messageEditDiv {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+#enterMessage {
+    resize: none;
+}

@@ -1,0 +1,16 @@
+#partyDiv {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+.partyList {
+    max-height: 300px;
+    overflow-y: auto;
+}
+.submittedParty {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    place-content: center;
+    gap: 10px;
+    text-align: center;
+}
