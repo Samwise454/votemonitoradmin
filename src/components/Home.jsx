@@ -74,6 +74,10 @@ const Home = () => {
                             setResp("Cannot Login Contact Dev!");
                             showResponse();
                         }
+                        else if (response.data.code === "sw123") {
+                            setResp(response.data.msg);
+                            showResponse();
+                        }
                         else if (response.data.code === "sw321") {
                             localStorage.setItem('subadmin', response.data.msg);
                             navigate("/Dashboard");

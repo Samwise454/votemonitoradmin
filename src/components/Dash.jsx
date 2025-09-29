@@ -5,18 +5,85 @@ import 'animate.css';
 import '../css/dash.css';
 import axios from 'axios';
 
-const Dash = () => {
+const Dash = (props) => {
   const [whichDiv, setWhichDiv] = useState("poLga");
+  const [loading, setLoading] = useState(false);
+  const [loginDet, setLoginDet] = useState(localStorage.getItem('subadmin'));
+  const api = props.api;
+  const img = 'https://naijavote.esbatech.org/images/partyLogo/';//image directory
+  const trigger = props.trigger;
+  const [allResult, setAllResult] = useState({
+      accredVoter: "",
+      awr: "",
+      regVoter: "",
+      validVoter: ""
+  });
 
-  const [whichParty, setWhichParty] = useState([
-    "All Progressive Grand Alliance", "Action Alliance", "African Action Congress",
-    "African Democratic Congress", "All Progressive Congress",
-    "Accord", "Action People's Party", 
-    "Allied Peoples Movement", "Boot Party", "Labour Party",
-    "New Nigeria People's Party", "National Rescue Movement",
-    "People's Democratic Party", "Social Democratic Party",
-    "Young Progressive Party", "Zenith Labour Party"
-  ]);
+  const fetchGeneral = api + "/getresult.php";
+
+  useEffect(() => {
+      if (loginDet === null) {
+          navigate("/");
+      }
+      else {
+          setLoading(true);
+          let data = {
+              subadmin: loginDet
+          }
+          const getResult = async () => {
+              try {
+                  const response = await axios.post(fetchGeneral, JSON.stringify(data));
+                  // console.log(response.data);
+                  if (response.status === 200) {
+                      setAllResult({
+                          accredVoter: response.data.accred,
+                          awr: response.data.awr,
+                          regVoter: response.data.regVoter,
+                          validVoter: response.data.validVote
+                      });
+                      setPartyAcronym([
+                        response.data.partyAcro1,
+                        response.data.partyAcro2,
+                        response.data.partyAcro3,
+                        response.data.partyAcro4,
+                        response.data.partyAcro5,
+                        response.data.partyAcro6,
+                      ]);
+                      setPartyPercent([
+                        response.data.party1,
+                        response.data.party2,
+                        response.data.party3,
+                        response.data.party4,
+                        response.data.party5,
+                        response.data.party6,
+                      ]);
+                  }
+                  else {
+                      setAllResult({
+                          accredVoter: "",
+                          awr: "",
+                          regVoter: "",
+                          validVoter: ""
+                      });
+                      setPartyAcronym(["","","","","",""]);
+                      setPartyPercent([0,0,0,0,0,0]);
+                  }
+              } catch(err) {
+                  setAllResult({
+                      accredVoter: "",
+                      awr: "",
+                      regVoter: "",
+                      validVoter: ""
+                  });
+                  setPartyAcronym(["","","","","",""]);
+                  setPartyPercent([0,0,0,0,0,0]);
+              } finally {
+                  setLoading(false);
+              }
+          }
+          getResult();
+      }
+  }, [trigger]);
 
   const [partyBg, setPartyBg] = useState({
     A: 'flex flex-row shadow-md p-2 rounded-sm mr-5 bg-green-700 text-white text-sm',
@@ -39,27 +106,64 @@ const Dash = () => {
     ZLP: 'flex flex-row shadow-md p-2 rounded-sm mr-5 bg-white text-black text-sm',
   });
 
-  const [partyAcronym, setPartyAcronym] = useState(["ADC", "APC", "APGA", "LP", "PDP", "YPP"]);
+  const [partyAcronym, setPartyAcronym] = useState(["","","","","",""]);
 
-  const [partyPercent, setPartyPercent] = useState([2, 20, 40, 10, 20, 8]);
+  const [partyPercent, setPartyPercent] = useState([0,0,0,0,0,0]);
+
+  const [oldHeight, setOldHeight] = useState([15, 10, 40, 5, 10, 20]);
+
+  const [hToggle, setHtoggle] = useState(false);
+
+  useEffect(() => {
+    let voteCount = document.querySelectorAll(".voteCount");
+    if (hToggle === false) {
+      voteCount.forEach((element) => {
+        element.classList.add('animate__animated', 'animate__zoomIn');
+      });
+      setHtoggle(true);
+    }
+    // else {
+    //   setHtoggle(false);
+    // }
+  }, []);
+
+  const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
     let numParty = partyPercent.length;
+    const allChartData = [];
+    
     for (let i = 0; i < numParty; i++) {
       //looping through the number of parties
       let bar = document.querySelector("#bar_"+i);
       let barTableHeight = document.querySelector("#barTable").clientHeight;//eg 460px
-      
+      let tableHeight = 425;
+      let totalVotes = allResult.validVoter
+
       //let's now calculate the height of each bar
-      let eachBar = Math.floor((partyPercent[i] / 100) * 425);
-      bar.style.height = eachBar+"px"; 
-      bar.style.transition = "height 2s ease-in-out";
+      let eachBar = Math.floor((partyPercent[i] / totalVotes) * 100).toFixed(0);//by how much each bar should grow
+      let barGrowth = Math.floor((partyPercent[i] / totalVotes) * tableHeight).toFixed(0);
+      allChartData.push(eachBar);
+     
+      bar.style.height = barGrowth+"px"; 
+      bar.style.transition = "height 4s ease-in-out";
     }
+    
+    setChartData(allChartData)
   }, [partyPercent]);
 
 
   return (
     <div>
+      {loading == true ?
+          <section id='page_loader' className='absolute top-0 right-0'>
+              <span className='loader mr-5'>
+
+              </span>
+          </section>  
+      :
+          <></>
+      }
       <div className="eachParty flex flex-row mt-10 align-center justify-center">
         <section className='flex flex-row shadow-md p-2 rounded-sm mr-5'>
           <div className='text-l'>
@@ -67,103 +171,103 @@ const Dash = () => {
                 <tbody className='text-sm text-nowrap leading-8'>
                     <tr>
                         <td className='pl-1'>Accredited Voters:</td>
-                        <td className='text-left pl-3 pr-1 font-bold text-blue-700'>100,000,000</td>
+                        <td className='text-left pl-3 pr-1 font-bold text-blue-700'>{allResult.accredVoter}</td>
                     </tr>
 
                     <tr>
                         <td className='pl-1'>Valid Votes Cast:</td>
-                        <td className='text-left pl-3 pr-1 font-bold text-green-700'>200</td>
+                        <td className='text-left pl-3 pr-1 font-bold text-green-700'>{allResult.validVoter}</td>
                     </tr>
 
                     <tr>
                         <td title='Awaiting Results' className='pl-1'>AWR</td>
-                        <td className='text-left pl-3 pr-1 font-bold'><span className='text-red-700'>200</span> / <span>1,000</span></td>
+                        <td className='text-left pl-3 pr-1 font-bold'><span className='text-red-700'>{allResult.awr}</span> / <span>{allResult.regVoter}</span></td>
                     </tr>
                 </tbody>
             </table>
           </div>
         </section>
 
-        <section className={partyBg.ADC}>
+        <section className={partyBg[partyAcronym[0]]}>
           <div>
             <div className='flex flex-row'>
-                <img src="/party/ADC.jpeg" id="logo1" className='cursor-pointer rounded-sm w-10 h-10 mt-1 mr-2' alt="Party logo" />
-                <p className='text-sm mt-4 pr-2'>ADC</p>
+                <img src={img + partyAcronym[0] + ".jpeg"} id="logo1" className='cursor-pointer rounded-sm w-10 h-10 mt-1 mr-2' alt="Party logo" />
+                <p className='text-sm mt-4 pr-2'>{partyAcronym[0]}</p>
             </div>
             
-            <section className='mt-2 shadow-md p-1 animate__animated animate__slideInDown text-center'>
+            <section className='voteCount mt-2 shadow-md p-1 text-center'>
                 Total Votes 
-                <p className='font-bold text-md'>2,000</p>
+                <p className='font-bold text-md'>{partyPercent[0]}</p>
             </section>
           </div>
         </section>
 
-        <section className={partyBg.APC}>
+        <section className={partyBg[partyAcronym[1]]}>
           <div>
             <div className='flex flex-row'>
-                <img src="/party/APC.jpeg" id="logo1" className='cursor-pointer rounded-sm w-10 h-10 mt-1 mr-2' alt="Party logo" />
-                <p className='text-sm mt-4 pr-2'>APC</p>
+                <img src={img + partyAcronym[1] + ".jpeg"} id="logo2" className='cursor-pointer rounded-sm w-10 h-10 mt-1 mr-2' alt="Party logo" />
+                <p className='text-sm mt-4 pr-2'>{partyAcronym[1]}</p>
             </div>
             
-            <section className='mt-2 shadow-md p-1 animate__animated animate__slideInDown text-center'>
+            <section className='voteCount mt-2 shadow-md p-1 text-center'>
                 Total Votes 
-                <p className='font-bold text-md'>16,000</p>
+                <p className='font-bold text-md'>{partyPercent[1]}</p>
             </section>
           </div>
         </section>
 
-        <section className={partyBg.APGA}>
+        <section className={partyBg[partyAcronym[2]]}>
           <div>
             <div className='flex flex-row'>
-                <img src="/party/APGA.jpeg" id="logo1" className='cursor-pointer rounded-sm w-10 h-10 mt-1 mr-2' alt="Party logo" />
-                <p className='text-sm mt-4 pr-2'>APGA</p>
+                <img src={img + partyAcronym[2] + ".jpeg"} id="logo3" className='cursor-pointer rounded-sm w-10 h-10 mt-1 mr-2' alt="Party logo" />
+                <p className='text-sm mt-4 pr-2'>{partyAcronym[2]}</p>
             </div>
             
-            <section className='mt-2 shadow-md p-1 animate__animated animate__slideInDown text-center'>
+            <section className='voteCount mt-2 shadow-md p-1 text-center'>
                 Total Votes 
-                <p className='font-bold text-md'>156,000</p>
+                <p className='font-bold text-md'>{partyPercent[2]}</p>
             </section>
           </div>
         </section>
 
-        <section className={partyBg.LP}>
+        <section className={partyBg[partyAcronym[3]]}>
           <div>
             <div className='flex flex-row'>
-                <img src="/party/LP.jpeg" id="logo1" className='cursor-pointer rounded-sm w-10 h-10 mt-1 mr-2' alt="Party logo" />
-                <p className='text-sm mt-4 pr-2'>LP</p>
+                <img src={img + partyAcronym[3] + ".jpeg"} id="logo4" className='cursor-pointer rounded-sm w-10 h-10 mt-1 mr-2' alt="Party logo" />
+                <p className='text-sm mt-4 pr-2'>{partyAcronym[3]}</p>
             </div>
             
-            <section className='mt-2 shadow-md p-1 animate__animated animate__slideInDown text-center'>
+            <section className='voteCount mt-2 shadow-md p-1 text-center'>
                 Total Votes 
-                <p className='font-bold text-md'>6,000</p>
+                <p className='font-bold text-md'>{partyPercent[3]}</p>
             </section>
           </div>
         </section>
 
-        <section className={partyBg.PDP}>
+        <section className={partyBg[partyAcronym[4]]}>
           <div>
             <div className='flex flex-row'>
-                <img src="/party/PDP.jpeg" id="logo1" className='cursor-pointer rounded-sm w-10 h-10 mt-1 mr-2' alt="Party logo" />
-                <p className='text-sm mt-4 pr-2'>PDP</p>
+                <img src={img + partyAcronym[4] + ".jpeg"} id="logo5" className='cursor-pointer rounded-sm w-10 h-10 mt-1 mr-2' alt="Party logo" />
+                <p className='text-sm mt-4 pr-2'>{partyAcronym[4]}</p>
             </div>
             
-            <section className='mt-2 shadow-md p-1 animate__animated animate__slideInDown text-center'>
+            <section className='voteCount mt-2 shadow-md p-1 text-center'>
                 Total Votes 
-                <p className='font-bold text-md'>60,000</p>
+                <p className='font-bold text-md'>{partyPercent[4]}</p>
             </section>
           </div>
         </section>
 
-        <section className={partyBg.YPP}>
+        <section className={partyBg[partyAcronym[5]]}>
           <div>
             <div className='flex flex-row'>
-                <img src="/party/YPP.jpeg" id="logo1" className='cursor-pointer rounded-sm w-10 h-10 mt-1 mr-2' alt="Party logo" />
-                <p className='text-sm mt-4 pr-2'>YPP</p>
+                <img src={img + partyAcronym[5] + ".jpeg"} id="logo6" className='cursor-pointer rounded-sm w-10 h-10 mt-1 mr-2' alt="Party logo" />
+                <p className='text-sm mt-4 pr-2'>{partyAcronym[5]}</p>
             </div>
             
-            <section className='mt-2 shadow-md p-1 animate__animated animate__slideInDown text-center'>
+            <section className='voteCount mt-2 shadow-md p-1 text-center'>
                 Total Votes 
-                <p className='font-bold text-md'>1,560</p>
+                <p className='font-bold text-md'>{partyPercent[5]}</p>
             </section>
           </div>
         </section>
@@ -192,12 +296,12 @@ const Dash = () => {
                   <section key={dataIndex} className='barDiv flex align-center justify-center flex-col relative'>
                     <div id={"bar_"+dataIndex} className="barMain w-full mb-6 bg-blue-600 ml-1">
                       <div className="barVal absolute -mt-5 rounded-full bg-black text-white shadow-sm top-0 w-fit p-1 px-1.5 text-center text-sm">
-                        {partyPercent[dataIndex]}
+                        {chartData[dataIndex] + " %"}
                       </div>
                     </div>  
 
                     <div className="pLogo w-full h-auto absolute bottom-0 -mb-13">
-                      <img src={"/party/"+partyAcronym[dataIndex]+".jpeg"} id={"p"+dataIndex} className='cursor-pointer rounded-sm h-13 w-15 border-1' alt="Party logo" />
+                      <img src={img + partyAcronym[dataIndex]+".jpeg"} id={"p"+dataIndex} className='cursor-pointer rounded-sm h-13 w-15 border-1' alt="Party logo" />
 
                       <p className='text-center text-sm mt-1'>{partyAcronym[dataIndex]}</p>
                     </div>

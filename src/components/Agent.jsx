@@ -306,6 +306,7 @@ const Agent = (props) => {
         if (fname == "" || mname == "" || lname == "" || gender == "" || tel == "" || state == "" || lga == ""
             || ward == "") {
             setResp("Fill all form input!");
+            hideLoader();
             allow = "no";
         }
       }
@@ -314,11 +315,12 @@ const Agent = (props) => {
             || ward == "" || poll == "") {
             setResp("Fill all form input!");
             allow = "no";
+            hideLoader();
         }
       }
       if (allow === "yes") {
         let data = JSON.stringify(formData);
-        console.log(data)
+        // console.log(data)
         hideLoader();
         const setData = async () => {
           try {
@@ -333,10 +335,16 @@ const Agent = (props) => {
             setResp("Error processing!");
           } finally {
             hideLoader();
+            if (dataState === false) {
+                setDataState(true);
+            }
+            else if (dataState === true) {
+                setDataState(false);
+            }
           }
         }
 
-        // setData();
+        setData();
       }
     }
 
@@ -345,6 +353,15 @@ const Agent = (props) => {
       <h2 className='mt-3 text-xl mb-3'>Manage Agents</h2>
 
       <div>
+         {loading == true ?
+              <section id='page_loader' className='absolute top-0 right-0'>
+                <span className='loader mr-5'>
+
+                </span>
+              </section>  
+          :
+              <></>
+          }
         {addAgent === false ?
           <section className='text-center relative'>
             <button onClick={handleAgentAdd} className='border-0 outline-0 bg-green-700 text-white cursor-pointer px-5 py-2 rounded-sm mr-20'>
@@ -566,11 +583,11 @@ const Agent = (props) => {
                 <tr>
                   <th>S/N0</th>
                   <th>
-                    Agent Image
+                    Image
                   </th>
                   <th>
-                    Name <br />
-                    <span className='text-sm font-normal ml-0 p-1 rounded-sm bg-blue-100 shadow-sm cursor-pointer'>a-z</span> 
+                    Name
+                    <span className='text-sm font-normal ml-1 p-1 rounded-sm bg-blue-100 shadow-sm cursor-pointer'>a-z</span> 
                     <span className='text-sm font-normal ml-1 p-1 rounded-sm bg-blue-100 shadow-sm cursor-pointer'>z-a</span>
                   </th>
                   <th>Tel</th>
@@ -597,15 +614,15 @@ const Agent = (props) => {
                         <td className='partyTableTd'>{data.job}</td>
                         <td className='partyTableTd'>{data.location}</td>
                         {/* <td className='partyTableTd'>26.8558853, 80.9445347 <FontAwesomeIcon icon={faLocationCrosshairs} className='border-1 rounded-sm p-1 ml-1 text-blue-600 cursor-pointer'/></td> */}
-                        <td className='partyTableTd text-blue-600 cursor-pointer'>{data.lastLogin}</td>
-                        <td className='partyTableTd'>{data.dateCreated}</td>
+                        <td className='partyTableTd text-blue-600 cursor-pointer text-center'>{data.lastLogin}</td>
+                        <td className='partyTableTd text-center'>{data.dateCreated}</td>
                         <td className='relative'>
                           {data.userState == "active" ?
-                              <FontAwesomeIcon onClick={changeState} icon={faUnlock} className='cursor-pointer text-green-700 bg-white border-1 p-1 rounded-sm'/>
+                              <FontAwesomeIcon onClick={changeState} id={"agent_"+data.id} icon={faUnlock} className='text-center cursor-pointer text-green-700 bg-white border-1 p-1 rounded-sm'/>
                           :
-                              <FontAwesomeIcon onClick={changeState} icon={faLock} className='cursor-pointer text-yellow-400 bg-black border-1 p-1 rounded-sm'/>
+                              <FontAwesomeIcon onClick={changeState} id={"agent_"+data.id} icon={faLock} className='text-center cursor-pointer text-yellow-400 bg-black border-1 p-1 rounded-sm'/>
                           }
-                          <FontAwesomeIcon onClick={editItem} icon={faPen} className=' cursor-pointer text-red-600 border-1 border-red-200 p-1 rounded-sm'/>
+                          {/* <FontAwesomeIcon onClick={editItem} icon={faPen} className=' cursor-pointer text-red-600 border-1 border-red-200 p-1 rounded-sm'/> */}
                         </td>
                       </tr>
                     );
@@ -626,11 +643,11 @@ const Agent = (props) => {
                         <td className='partyTableTd'>{data.dateCreated}</td>
                         <td className='relative'>
                           {data.userState == "active" ?
-                              <FontAwesomeIcon onClick={changeState} icon={faUnlock} className='cursor-pointer text-green-700 bg-white border-1 p-1 rounded-sm'/>
+                              <FontAwesomeIcon onClick={changeState} id={"agent_"+data.id} icon={faUnlock} className='cursor-pointer text-green-700 bg-white border-1 p-1 rounded-sm'/>
                           :
-                              <FontAwesomeIcon onClick={changeState} icon={faLock} className='cursor-pointer text-yellow-400 bg-black border-1 p-1 rounded-sm'/>
+                              <FontAwesomeIcon onClick={changeState} id={"agent_"+data.id} icon={faLock} className='cursor-pointer text-yellow-400 bg-black border-1 p-1 rounded-sm'/>
                           }
-                          <FontAwesomeIcon onClick={editItem} icon={faPen} className=' cursor-pointer text-red-600 border-1 border-red-200 p-1 rounded-sm'/>
+                          {/* <FontAwesomeIcon onClick={editItem} icon={faPen} className=' cursor-pointer text-red-600 border-1 border-red-200 p-1 rounded-sm'/> */}
                         </td>
                       </tr>
                     );

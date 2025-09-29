@@ -4,10 +4,36 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell, faCircleXmark, faGear } from '@fortawesome/free-solid-svg-icons';
 import '../css/nav.css';
 import 'animate.css';
+import axios from 'axios';
 
 const Nav = (props) => {
   const [toggleMenu, setToggleMenu] = useState(false);//menu hidden by default
+  const aLink = props.api;
+  const api = props.api + '/getadminnav.php';
   const navigate = useNavigate(); 
+  const [numAgents, setNumAgents] = useState("");
+  const userData = localStorage.getItem("subadmin");
+
+  useEffect(() => {
+    let data = {
+      user: userData
+    }
+    const fetchAgent = async () => {
+      try {
+        const response = await axios.post(api, JSON.stringify(data));
+        // console.log(response.data)
+        if (response.status === 200) {
+          setNumAgents(response.data);
+        }
+        else {
+          setNumAgents("");
+        }
+      } catch (err) {
+        setNumAgents("");
+      }
+    }
+    fetchAgent();
+  }, []);
 
   const hideShowMenu = () => {
     let open = document.querySelector("#openMenu");
@@ -62,7 +88,7 @@ const Nav = (props) => {
 
       <section className='flex pt-2.5 align-center justify-center-safe'>
         <div className='relative'>
-          <FontAwesomeIcon onClick={passProp} id="d6_nav" icon={faBell} className='text-yellow-400 text-3xl cursor-pointer'/>
+          <FontAwesomeIcon api={aLink} onClick={passProp} id="d6_nav" icon={faBell} className='text-yellow-400 text-3xl cursor-pointer'/>
           <span className='bg-green-950 text-white rounded-full absolute top-0 right-0 -mr-2 -mt-2 px-2 py-0 text-md cursor-pointer'>
             3
           </span>
@@ -71,7 +97,7 @@ const Nav = (props) => {
         <div className='relative border-1 border-white rounded-md ml-8 px-4 pt-1 cursor-pointer'>
           <span className='text-white' id="d2_nav" onClick={passProp}>Agents</span>
           <span className='absolute top-0 right-0 -mt-3 -mr-3 text-sm bg-green-950 text-white rounded-full px-1.5 py-1'>
-            10
+            {numAgents}
           </span>
         </div>
 

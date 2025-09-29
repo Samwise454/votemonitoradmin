@@ -5,28 +5,9 @@ import 'animate.css';
 import '../css/miscdata.css';
 import axios from 'axios';
 
-const Lgadata = () => {
+const Lgadata = (props) => {
     const [allState, setAllState] = useState({});
-    const [partyBg, setPartyBg] = useState({
-        A: 'ml-10 shadow-md rounded-sm bg-green-700 text-white p-1',
-        AA: 'ml-10 shadow-md rounded-sm bg-white text-black p-1',
-        AAC: 'ml-10 shadow-md rounded-sm bg-yellow-800 text-white p-1',
-        ADC: 'ml-10 shadow-md rounded-sm bg-green-950 text-white p-1',
-        ADP: 'ml-10 shadow-md rounded-sm bg-blue-700 text-white p-1',
-        APC: 'ml-10 shadow-md rounded-sm bg-red-200 text-black p-1',
-        APGA: 'ml-10 shadow-md rounded-sm bg-yellow-900 text-white p-1',
-        APM: 'ml-10 shadow-md rounded-sm bg-white text-black p-1',
-        APP: 'ml-10 shadow-md rounded-sm bg-red-100 text-black p-1',
-        BP: 'ml-10 shadow-md rounded-sm bg-green-800 text-white p-1',
-        LP: 'ml-10 shadow-md rounded-sm bg-white text-green-800 p-1',
-        NNPP: 'ml-10 shadow-md rounded-sm bg-red-200 text-black p-1',
-        NRM: 'ml-10 shadow-md rounded-sm bg-yellow-200 text-black p-1',
-        PDP: 'ml-10 shadow-md rounded-sm bg-green-200 text-black p-1',
-        PRP: 'ml-10 shadow-md rounded-sm bg-black text-white p-1',
-        SDP: 'ml-10 shadow-md rounded-sm bg-yellow-300 text-black p-1',
-        YPP: 'ml-10 shadow-md rounded-sm bg-white text-black p-1',
-        ZLP: 'ml-10 shadow-md rounded-sm bg-white text-black p-1',
-      });
+    const partyBg = props.partyBg;
 
   return (
     <div className='stateData ml-10'>

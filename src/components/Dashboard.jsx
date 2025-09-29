@@ -19,7 +19,7 @@ const Dashboard = () => {
     const [toggleKey, setToggleKey] = useState("");
     const [showHideBar, setShowHideBar] = useState(true);// means hide bar is not hidden 
     const [data, setData] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [propData, setPropData] = useState("");
     const [loginDet, setLoginDet] = useState(localStorage.getItem('subadmin'));
@@ -27,12 +27,6 @@ const Dashboard = () => {
 
     const api = 'https://naijavote.esbatech.org';//API endpoint
     const img = 'https://naijavote.esbatech.org/images';//image directory
-
-    useEffect(() => {
-        if (loginDet === null) {
-            navigate("/");
-        }
-    }, []);
 
     const toggleDashboard = (e) => {
         let dashMenu = document.querySelector("#"+e.target.id);
@@ -111,7 +105,7 @@ const Dashboard = () => {
 
   return (
     <div>
-      <Nav onClick={getAlarm}></Nav>
+      <Nav api={api} onClick={getAlarm}></Nav>
 
         <main id="mainDash" className='dashMain fixed'>
             <section className='dashSidebar text-white p-3 relative'>
