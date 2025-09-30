@@ -8,6 +8,13 @@ import axios from 'axios';
 const Lgadata = (props) => {
     const [allState, setAllState] = useState({});
     const partyBg = props.partyBg;
+    const result = props.lgaResult;
+    const [allLgaResult, setAllLgaResult] = useState([]);
+
+    useEffect(() => {
+        // console.log(result)
+       setAllLgaResult(result);
+    }, [result]);
 
   return (
     <div className='stateData ml-10'>

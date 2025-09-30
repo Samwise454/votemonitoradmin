@@ -26,7 +26,7 @@ const Result = () => {
     const userData = localStorage.getItem('subadmin');
 
     const api = 'https://naijavote.esbatech.org';//API endpoint
-    const imgLink = 'https://naijavote.esbatech.org/images';//image directory
+    const partyLogo = 'https://naijavote.esbatech.org/images/partyLogo/';//image directory
     const getstate = api + "/getadminstate.php";
     const getlga = api + "/getadminlga.php";
     const getward = api + "/getadminward.php";
@@ -39,23 +39,28 @@ const Result = () => {
     const [lgaResult, setLgaResult] = useState([]);
     const [wardResult, setWardResult] = useState([]);
     const [pollResult, setPollResult] = useState([]); 
-    const [whichResult, setWhichResult] = useState("");
+    const [logo, setLogo] = useState([]);
+    const [acronym, setAcronym] = useState([]);
+    
+    const [whichResult, setWhichResult] = useState(""); //send
+    const [location, setLocation] = useState(""); //send
 
     const [lgName, setLgName] = useState([]);
     
     // const [whichResult, setWhichResult] = useState("state");
     // const [whichLocation, setWhichLocation] = useState("");
 
-    const fetchEachResult = (whichResult, location) => {
+    const fetchEachResult = (whichResult, location) => {//pass this whichResult and location to Lgadata as prop
         let data = {
             result: whichResult,
             location: location,
             subadmin: userData
         }
-        // console.log(data)
+        setLoading(true);
         const getRes = async () => {
             try {
                 const response = await axios.post(getresult, JSON.stringify(data));
+                console.log(response.data)
                 if (response.status === 200) {
                     if (whichResult === "state") {
                         setStateResult(response.data);
@@ -81,6 +86,8 @@ const Result = () => {
                 setLgaResult([]);
                 setWardResult([]);
                 setPollResult([]);
+            } finally {
+                setLoading(false);
             }
         }
         getRes();
@@ -98,13 +105,14 @@ const Result = () => {
         const fetchData = async () => {
             try {
                 const response = await axios.post(getprofile, JSON.stringify(data));
-                // console.log(response.data)
                 if(response.status === 200) {
                     setAdminData(response.data);
                     setElectionProfile(response.data.eCode)
                     if (response.data.eCode !== "pres") {
                         setSelectedState(response.data.state);
                         setWardCode(response.data.wardCode);
+                        setLogo(response.data.logo);
+                        setAcronym(response.data.party);
                     }
                 }
                 else {
@@ -120,25 +128,6 @@ const Result = () => {
         }
         fetchData();
     }, []);
-
-    useEffect(() => {
-        if (allLga.length !== 0) {
-            let lg = [];
-            allLga.map((data) => {
-                let eachLg = data.lgName;
-                let sortRes = lgaResult[eachLg];
-                lg.push(sortRes);
-            });
-
-            let sorted = [];
-            lg.forEach((element) => {
-                if (element !== undefined) {
-                    
-                }
-            })
-            setLgName(sorted);
-        }
-    }, [allLga, whichResult]);
 
     const [trigger, setTrigger] = useState("");
 
@@ -218,22 +207,25 @@ const Result = () => {
                     setWardCode(btnVal);
                     fetchEachResult("lga", btnVal);
                     setWhichResult("lga");
+                    setLocation(btnVal);
                     break;
                 case 'ward':
                     setSelectedLg(idValue);
                     fetchEachResult("ward", btnVal);
                     setWhichResult("ward");
+                    setLocation(btnVal);
                     break;
                 case 'poll':
                     setSelectedWard(idValue);
                     fetchEachResult("poll", btnVal);
                     setWhichResult("poll");
-                    console.log(lgName)
+                    setLocation(btnVal);
                     break;
             }
         }
         else if (!e.target.id.includes("eachpoll")) {
             setWhichResult(e.target.id);
+            setLocation("all");
             fetchEachResult(e.target.id, "all");
             setWhat(e.target.id);
             setGoBack(true);
@@ -453,7 +445,103 @@ const Result = () => {
                                                             {data.lgName}
                                                         </button>
                                                     </p>
-                                                    <Lgadata partyBg={partyBg} api={api} imgLink={imgLink} whichState={selectedLg}/>
+                                                    <div className='stateData ml-10'>
+                                                        <section className='misc1 flex flex-row mb-1'>
+                                                            <div className="shadow-sm rounded-sm p-1">
+                                                                <section className='text-sm text-nowrap bg-gray-100 p-1 flex flex-row'>
+                                                                    <p className='partyText'>Total Accredited Voters: </p>
+                                                                    {lgaResult[dataIndex]["lga"] == "" ?
+                                                                        <p className='partyText font-bold w-full text-right ml-1 text-blue-700'>Nil</p>
+                                                                    :
+                                                                        <p className='partyText font-bold w-full text-right ml-1 text-blue-700'>{lgaResult[dataIndex][0]["accredVoter"]}</p>
+                                                                    }
+                                                                </section>
+                                                                <section className='text-sm text-nowrap p-1 flex flex-row'>
+                                                                    <p className='partyText'>Valid Votes Cast: </p>
+                                                                    {lgaResult[dataIndex]["lga"] == "" ?
+                                                                        <p className='partyText font-bold w-full text-right ml-1 text-green-700'>Nil</p>
+                                                                    :
+                                                                        <p className='partyText font-bold w-full text-right ml-1 text-green-700'>{lgaResult[dataIndex][0]["totalVote"]}</p>
+                                                                    }
+                                                                </section>
+                                                                <section className='text-sm text-nowrap bg-gray-100 p-1 flex flex-row'>
+                                                                    <p className='partyText' title='Awaiting Results'>AWR: </p>
+                                                                    {lgaResult[dataIndex]["lga"] == "" ?
+                                                                        <p className='partyText font-bold w-full text-right ml-1'><span className='text-red-700'>Nil</span> / <span>Nil</span></p>
+                                                                    :
+                                                                        <p className='partyText font-bold w-full text-right ml-1'><span className='text-red-700'>{lgaResult[dataIndex][0]["awr"]}</span> / <span>{lgaResult[dataIndex][0]["regVoter"]}</span></p>
+                                                                    }
+                                                                </section>
+                                                            </div>
+
+                                                            <div className={partyBg[acronym[0]]}>
+                                                                <section className='partyImgDiv text-sm'>
+                                                                    <img src={partyLogo + logo[0]} alt="Party" className='w-8 h-7 mb-1' />
+                                                                    <p>{acronym[0]}</p>
+                                                                </section>
+                                                                <section className='text-sm'>
+                                                                    <p className='partyTextVote'>Total Votes</p>
+                                                                    <p className='font-bold text-center'>{lgaResult[dataIndex][0]["party1"]}</p>
+                                                                </section>
+                                                            </div>
+
+                                                            <div className={partyBg[acronym[1]]}>
+                                                                <section className='partyImgDiv text-sm'>
+                                                                    <img src={partyLogo + logo[1]} alt="Party" className='w-8 h-7 mb-1' />
+                                                                    <p>{acronym[1]}</p>
+                                                                </section>
+                                                                <section className='text-sm'>
+                                                                    <p className='partyTextVote'>Total Votes</p>
+                                                                    <p className='font-bold text-center'>{lgaResult[dataIndex][0]["party2"]}</p>
+                                                                </section>
+                                                            </div>
+
+                                                            <div className={partyBg[acronym[2]]}>
+                                                                <section className='partyImgDiv text-sm'>
+                                                                    <img src={partyLogo + logo[2]} alt="Party" className='w-8 h-7 mb-1' />
+                                                                    <p>{acronym[2]}</p>
+                                                                </section>
+                                                                <section className='text-sm'>
+                                                                    <p className='partyTextVote'>Total Votes</p>
+                                                                    <p className='font-bold text-center'>{lgaResult[dataIndex][0]["party3"]}</p>
+                                                                </section>
+                                                            </div>
+
+                                                            <div className={partyBg[acronym[3]]}>
+                                                                <section className='partyImgDiv text-sm'>
+                                                                    <img src={partyLogo + logo[3]} alt="Party" className='w-8 h-7 mb-1' />
+                                                                    <p>{acronym[3]}</p>
+                                                                </section>
+                                                                <section className='text-sm'>
+                                                                    <p className='partyTextVote'>Total Votes</p>
+                                                                    <p className='font-bold text-center'>{lgaResult[dataIndex][0]["party4"]}</p>
+                                                                </section>
+                                                            </div>
+
+                                                            <div className={partyBg[acronym[4]]}>
+                                                                <section className='partyImgDiv text-sm'>
+                                                                    <img src={partyLogo + logo[4]} alt="Party" className='w-8 h-7 mb-1' />
+                                                                    <p>{acronym[4]}</p>
+                                                                </section>
+                                                                <section className='text-sm'>
+                                                                    <p className='partyTextVote'>Total Votes</p>
+                                                                    <p className='font-bold text-center'>{lgaResult[dataIndex][0]["party5"]}</p>
+                                                                </section>
+                                                            </div>
+                                                            
+                                                            <div className={partyBg[acronym[5]]}>
+                                                                <section className='partyImgDiv text-sm'>
+                                                                    <img src={partyLogo + logo[5]} alt="Party" className='w-8 h-7 mb-1' />
+                                                                    <p>{acronym[5]}</p>
+                                                                </section>
+                                                                <section className='text-sm'>
+                                                                    <p className='partyTextVote'>Total Votes</p>
+                                                                    <p className='font-bold text-center'>{lgaResult[dataIndex][0]["party6"]}</p>
+                                                                </section>
+                                                            </div>
+                                                        </section>
+                                                    </div>
+                                                    {/* <Lgadata partyBg={partyBg} lgaResult={lgaResult} api={api} imgLink={imgLink} whichState={selectedLg}/> */}
                                                 </div>
                                             );
                                         })
