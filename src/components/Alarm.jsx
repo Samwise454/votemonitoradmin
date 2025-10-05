@@ -8,12 +8,14 @@ import axios from 'axios';
 const Alarm = (props) => {
     const api = props.api + '/managealarmdata.php';
     const addNum = props.api + '/addalarmnum.php';
+    const moveward = props.api + '/moveward.php';
     const [resp, setResp] = useState("");
     const [loading, setLoading] = useState(false);
     const [alarmNum, setAlarmNum] = useState([]);
     const [dataState, setDataState] = useState(false);
     const userData = localStorage.getItem("subadmin");
     const [allMsg, setAllMsg] = useState([]);
+    const [msgSet, setMsgSet] = useState(false);
     const [numData, setNumData] = useState({
         which: "",
         telNum: "",
@@ -29,6 +31,9 @@ const Alarm = (props) => {
         action: "getMsg",
         user: userData
     });
+
+    const [lastCount, setLastCount] = useState(0);
+    const eventSourceLink = props.api + `/getstream.php?subadmin=${userData}&lastcount=${lastCount}`;
 
     const handleInput = (e) => {
         let id = e.target.id;
@@ -126,7 +131,7 @@ const Alarm = (props) => {
             try {
                 const response = await axios.post(api, JSON.stringify(alarmMsg));
                 if (response.status === 200) {
-                    console.log(response.data);
+                    // console.log(response.data);
                     setAllMsg(response.data);
                 }
                 else {
@@ -136,6 +141,7 @@ const Alarm = (props) => {
                 setAllMsg([]);
             } finally {
                 setLoading(false);
+                setMsgSet(true);
             }
         }
 
@@ -143,9 +149,66 @@ const Alarm = (props) => {
         getAlarmMsg();
     }, [dataState]);
 
+    //temporary settings code
+    const runAction = () => {
+        const perform  = async () => {
+            try {
+                const response = await axios.get(moveward);
+                console.log(response.data)
+                if (response.status === 200) {
+                    setRespo("Done");
+                }
+                else {
+                    setRespo("Wahala");
+                }
+            } catch(err) {
+                setRespo(err);
+            }
+        }
+        perform();
+    }
+    const [respo, setRespo] = useState("");
+
+    //testing server sent event
+    // useEffect(() => {
+    //     // Create a new EventSource instance
+    //     const eventSource = new EventSource(eventSourceLink);
+
+    //     // Event listener for incoming messages
+    //     eventSource.onmessage = (event) => {
+    //         try {
+    //             const newNotification = event.data;
+    //             if (newNotification.error) {
+    //                 setRespo(newNotification.error);
+    //             } else {
+    //                 setRespo(newNotification);
+    //             }
+    //         } catch (e) {   
+    //             console.error("Error parsing SSE data:", e);
+    //         }
+    //     };
+
+    //     // Event listener for errors
+    //     eventSource.onerror = (error) => {
+    //         console.error("EventSource error:", error);
+    //         setRespo("Failed to connect to notification server.");
+    //         eventSource.close(); // Close the connection on error
+    //     };
+
+    //     // Clean up the EventSource connection when the component unmounts
+    //     return () => {
+    //         eventSource.close();
+    //     };
+    // }, []);
+
   return (
     <div>
       <h2 className='mt-3 text-xl mb-3'>Manage Alarms</h2>
+
+      {/* <button className="bg-green-950 text-white p-4" onClick={runAction}>Action</button>
+      <div>
+        {respo}
+      </div> */}
 
         <div className='alarmContainer relative'>
             {loading == true ?
@@ -171,13 +234,24 @@ const Alarm = (props) => {
                     </thead>
 
                     <tbody className='relative'>
-                        <tr>
-                            <td className='p-2'>1</td>
-                            <td className='p-2'>Okeke Dora</td>
-                            <td className='p-2'>Central School Aguata</td>
-                            <td className='p-2'>Our result sheets are missing</td>
-                            <td className='p-2'>2025-08-23 10:22:22</td>
-                        </tr>
+                        {msgSet == true ?
+                            allMsg.map((data, dataIndex) => {
+                                return (
+                                    data.msg == "nil" ?
+                                        <tr key={dataIndex}></tr>
+                                    :
+                                        <tr key={dataIndex}>
+                                            <td className='p-2'>{dataIndex + 1}</td>
+                                            <td className='p-2'>{data.agent}</td>
+                                            <td className='p-2'>{data.location}</td>
+                                            <td className='p-2'>{data.msg}</td>
+                                            <td className='p-2'>{data.time}</td>
+                                        </tr>
+                                );
+                            })
+                        :
+                            <tr></tr>
+                        }
                     </tbody>
                 </table>
             </section>

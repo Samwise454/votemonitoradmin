@@ -10,7 +10,7 @@ const Warddata = (props) => {
     const partyBg = props.partyBg;
 
   return (
-    <div className='stateData ml-10'>
+    <div className='stateData ml-5'>
         <section className='misc1 flex flex-row mb-1'>
             <div className="shadow-sm rounded-sm p-1">
                 <section className='text-sm text-nowrap bg-gray-100 p-1 flex flex-row'>

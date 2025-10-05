@@ -11,28 +11,35 @@ const Nav = (props) => {
   const aLink = props.api;
   const api = props.api + '/getadminnav.php';
   const navigate = useNavigate(); 
-  const [numAgents, setNumAgents] = useState("");
+  const [numAgents, setNumAgents] = useState(0);
+  const [numAlarm, setNumAlarm] = useState(0);
   const userData = localStorage.getItem("subadmin");
 
   useEffect(() => {
-    let data = {
-      user: userData
-    }
-    const fetchAgent = async () => {
-      try {
-        const response = await axios.post(api, JSON.stringify(data));
-        // console.log(response.data)
-        if (response.status === 200) {
-          setNumAgents(response.data);
+    const fetchInterval = setInterval(() => {
+        let data = {
+          user: userData
         }
-        else {
-          setNumAgents("");
+        const fetchAgent = async () => {
+          try {
+            const response = await axios.post(api, JSON.stringify(data));
+            if (response.status === 200) {
+              setNumAgents(response.data.numAgent);
+              setNumAlarm(response.data.numAlarm);
+            }
+            else {
+              setNumAgents(0);
+              setNumAlarm(0);
+            }
+          } catch (err) {
+            setNumAgents(0);
+            setNumAlarm(0);
+          }
         }
-      } catch (err) {
-        setNumAgents("");
-      }
-    }
-    fetchAgent();
+        fetchAgent();
+    }, 10000);
+
+    return () => clearInterval(fetchInterval);
   }, []);
 
   const hideShowMenu = () => {
@@ -61,6 +68,9 @@ const Nav = (props) => {
       close.classList.add('animate__animated', 'animate__rollOut');
       open.classList.add('animate__animated', 'animate__rollIn');
       menu.classList.add('animate__animated', 'animate__zoomOut');
+      setTimeout(() => {
+        menu.classList.add('hidden');
+      }, 800);
       setToggleMenu(false);
     }
   }
@@ -90,7 +100,7 @@ const Nav = (props) => {
         <div className='relative'>
           <FontAwesomeIcon api={aLink} onClick={passProp} id="d6_nav" icon={faBell} className='text-yellow-400 text-3xl cursor-pointer'/>
           <span className='bg-green-950 text-white rounded-full absolute top-0 right-0 -mr-2 -mt-2 px-2 py-0 text-md cursor-pointer'>
-            3
+            {numAlarm}
           </span>
         </div>
 

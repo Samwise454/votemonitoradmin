@@ -110,12 +110,13 @@ const Message = (props) => {
                     }, 2000);
 
                     resetResp();
-
+                    document.querySelector("#messageEdit").value = "";
                     hideLoader();
                     msgInput.value = "";
                     setFormData({
                         msgNum: "",
-                        msg: ""
+                        msg: "",
+                        action: "setMessage"
                     });
                 }
             }
@@ -207,8 +208,8 @@ const Message = (props) => {
                         </p>
                     }
 
-                    <div className='text-right mt-4 cursor-pointer'>
-                        <button className='bg-green-950 text-white px-3 py-2 rounded-sm'>Submit</button>
+                    <div className='text-right mt-4'>
+                        <button className='bg-green-950 text-white px-3 py-2 rounded-sm cursor-pointer'>Submit</button>
                     </div>
                 </div>
             </form>

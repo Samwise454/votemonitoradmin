@@ -19,7 +19,11 @@ const Dash = (props) => {
       validVoter: ""
   });
 
+  const userData = localStorage.getItem("subadmin");
+
   const fetchGeneral = api + "/getresult.php";
+  const [lastCount, setLastCount] = useState(0);
+  const eventSourceLink = api + `/getstream.php?subadmin=${userData}&lastcount=${lastCount}`;
 
   useEffect(() => {
       if (loginDet === null) {
@@ -35,12 +39,6 @@ const Dash = (props) => {
                   const response = await axios.post(fetchGeneral, JSON.stringify(data));
                   // console.log(response.data);
                   if (response.status === 200) {
-                      setAllResult({
-                          accredVoter: response.data.accred,
-                          awr: response.data.awr,
-                          regVoter: response.data.regVoter,
-                          validVoter: response.data.validVote
-                      });
                       setPartyAcronym([
                         response.data.partyAcro1,
                         response.data.partyAcro2,
@@ -49,41 +47,99 @@ const Dash = (props) => {
                         response.data.partyAcro5,
                         response.data.partyAcro6,
                       ]);
-                      setPartyPercent([
-                        response.data.party1,
-                        response.data.party2,
-                        response.data.party3,
-                        response.data.party4,
-                        response.data.party5,
-                        response.data.party6,
-                      ]);
                   }
                   else {
-                      setAllResult({
-                          accredVoter: "",
-                          awr: "",
-                          regVoter: "",
-                          validVoter: ""
-                      });
                       setPartyAcronym(["","","","","",""]);
-                      setPartyPercent([0,0,0,0,0,0]);
                   }
               } catch(err) {
-                  setAllResult({
-                      accredVoter: "",
-                      awr: "",
-                      regVoter: "",
-                      validVoter: ""
-                  });
                   setPartyAcronym(["","","","","",""]);
-                  setPartyPercent([0,0,0,0,0,0]);
               } finally {
                   setLoading(false);
               }
           }
           getResult();
       }
+
+      return () => {
+      
+      };
   }, [trigger]);
+
+  //this useEffect fetches the result at intervals of 2 seconds using SSE
+  useEffect(() => {
+    let retryTimeout;
+    let eventSource;
+
+      const connect = () => {
+        // Create a new EventSource instance
+        eventSource = new EventSource(eventSourceLink);
+
+        // Event listener for incoming messages
+        eventSource.onmessage = (event) => {
+            try {
+                const dashData = event.data;
+                if (dashData.error) {
+                    setAllResult({
+                      accredVoter: "",
+                      awr: "",
+                      regVoter: "",
+                      validVoter: ""
+                    });
+                    setPartyPercent([0,0,0,0,0,0]);
+                } else {
+                    // $allData = 'regVoter-'.$allRegVoter.'_accred-'.$allAccred.'_validVote-'.$allValidVote.'_awr-'.$allAwr.'_party1-'.$party1Res.'_party2-'.$party2Res.'_party3'.$party3Res.'_party4-'.$party4Res.'_party5-'.$party5Res.'_party6-'.$party6Res.'_lastcount-'.$trackCount;
+                    //let's break the data
+                    let splitData = dashData.split("_");
+
+                    let regVoter = splitData[0].split("-")[1];//eg regVoter-4000, we now split and get 4000;
+                    let accredVoter = splitData[1].split("-")[1];
+                    let validVote = splitData[2].split("-")[1];
+                    let awr = splitData[3].split("-")[1];
+                    let party1 = splitData[4].split("-")[1];
+                    let party2 = splitData[5].split("-")[1];
+                    let party3 = splitData[6].split("-")[1];
+                    let party4 = splitData[7].split("-")[1];
+                    let party5 = splitData[8].split("-")[1];
+                    let party6 = splitData[9].split("-")[1];
+                    let lastcount = splitData[10].split("-")[1];
+
+                    setAllResult({
+                        accredVoter: accredVoter,
+                        awr: awr,
+                        regVoter: regVoter,
+                        validVoter: validVote
+                    });
+                    setPartyPercent([party1, party2, party3, party4, party5, party6,]);
+                    setLastCount(lastcount);
+                    // console.log(dashData);
+                }
+            } catch (e) {   
+              //add something here later
+            }
+        };
+
+        // Event listener for errors
+        eventSource.onerror = (error) => {
+            // console.error("EventSource error:", error);
+            eventSource.close(); // Close the connection on error
+
+            // Try reconnecting in 3 seconds
+            retryTimeout = setTimeout(() => {
+              // console.log("Reconnecting SSE...");
+              connect();
+            }, 5000);
+        };
+      }
+
+      connect();
+
+      // Clean up the EventSource connection when the component unmounts
+      return () => {
+        if (retryTimeout) clearTimeout(retryTimeout);
+        if(eventSource) eventSource.close();
+      };
+  }, [trigger]);
+
 
   const [partyBg, setPartyBg] = useState({
     A: 'flex flex-row shadow-md p-2 rounded-sm mr-5 bg-green-700 text-white text-sm',
@@ -122,9 +178,10 @@ const Dash = (props) => {
       });
       setHtoggle(true);
     }
-    // else {
-    //   setHtoggle(false);
-    // }
+
+    return () => {
+      
+    };
   }, []);
 
   const [chartData, setChartData] = useState([]);
@@ -149,7 +206,11 @@ const Dash = (props) => {
       bar.style.transition = "height 4s ease-in-out";
     }
     
-    setChartData(allChartData)
+    setChartData(allChartData);
+
+    return () => {
+      
+    };
   }, [partyPercent]);
 
 
