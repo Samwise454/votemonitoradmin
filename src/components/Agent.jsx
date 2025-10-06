@@ -263,6 +263,7 @@ const Agent = (props) => {
       const fetchAll = async () => {
           try {
             const response = await axios.post(getstateco, data);
+            // console.log(response.data);
             if (response.status === 200) {
               if (table === "state") {
                 setAllState(response.data);

@@ -15,6 +15,7 @@ const Party = (props) => {
   const [chosenParty, setChosenParty] = useState([]);
   const [partyCount, selectPartyCount] = useState(0);
   const [partyResp, setpartyResp] = useState("Max Number of 6 parties: ");
+  const [electionStatus, setElectionStatus] = useState("Election Has Commenced!");
   const [submitedParty, setSubmittedParty] = useState([]);
   const [resp, setResp] = useState("");
   const [partyState, setPartyState] = useState(false);
@@ -130,6 +131,9 @@ const Party = (props) => {
           if (response.status === 200) {
             if (response.data.code === "sw12") {
               setResp("Error processing");
+            }
+            else if (response.data.code === "sw001") {
+              setResp(response.data.msg);
             }
             else if (response.data.code === "sw321") {
               setResp("Party Data Submitted");

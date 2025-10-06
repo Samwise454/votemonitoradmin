@@ -21,6 +21,10 @@ const Home = () => {
         if (loginDet !== null) {
             navigate("/Dashboard");
         }
+
+        return () => {
+
+        }
     }, []);
 
     const handleInput = (e) => {

@@ -14,6 +14,40 @@ const Nav = (props) => {
   const [numAgents, setNumAgents] = useState(0);
   const [numAlarm, setNumAlarm] = useState(0);
   const userData = localStorage.getItem("subadmin");
+  const checkData = aLink + '/checklog.php';
+
+  useEffect(() => {
+    const fetchInterval = setInterval(() => {
+      if (userData == null || userData.length == 0) {
+        navigate("/");
+      }
+      else {
+        let data = {
+          user: userData
+        };
+        
+        const checkAccess = async () => {
+          try {
+            const response = await axios.post(checkData, JSON.stringify(data));
+            if (response.status == 200) {
+              if (response.data.code === "sw12" || response.data.code === "sw000") {
+                localStorage.removeItem('subadmin');
+                navigate("/");
+              }
+            }
+          } catch (err) {
+            localStorage.removeItem('subadmin');
+            navigate("/");
+          }
+        }
+
+        checkAccess();
+      }
+    }, 5000);
+
+    return () => clearInterval(fetchInterval);
+  }, []);
+
 
   useEffect(() => {
     const fetchInterval = setInterval(() => {

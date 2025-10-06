@@ -4,7 +4,15 @@ import { faUnlock } from '@fortawesome/free-solid-svg-icons';
 import '../css/password.css';
 
 const Password = () => {
-    const [agentPass, setAgentPass] = useState("soludo@2025");
+    const [agentPass, setAgentPass] = useState("");
+
+    useEffect(() => {
+
+    }, []);
+
+    const getAgentPass = async () => {
+
+    }
 
   return (
     <div>

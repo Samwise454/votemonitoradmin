@@ -4,6 +4,7 @@ import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import 'animate.css';
 import '../css/dash.css';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Dash = (props) => {
   const [whichDiv, setWhichDiv] = useState("poLga");
@@ -18,6 +19,7 @@ const Dash = (props) => {
       regVoter: "",
       validVoter: ""
   });
+  const navigate = useNavigate();
 
   const userData = localStorage.getItem("subadmin");
 
