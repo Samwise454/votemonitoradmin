@@ -31,13 +31,13 @@ const Nav = (props) => {
             const response = await axios.post(checkData, JSON.stringify(data));
             if (response.status == 200) {
               if (response.data.code === "sw12" || response.data.code === "sw000") {
-                localStorage.removeItem('subadmin');
-                navigate("/");
+                // localStorage.removeItem('subadmin');
+                // navigate("/");
               }
             }
           } catch (err) {
-            localStorage.removeItem('subadmin');
-            navigate("/");
+            // localStorage.removeItem('subadmin');
+            // navigate("/");
           }
         }
 

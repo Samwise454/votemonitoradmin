@@ -5,7 +5,7 @@ import 'animate.css';
 import axios from 'axios';
 
 const Home = () => {
-    const api = 'https://naijavote.esbatech.org/login.php';
+    const api = 'https://naijavote.esbatech.org/loginadmin.php';
     let navigate = useNavigate();
 
     const [resp, setResp] = useState("");

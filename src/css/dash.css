@@ -40,8 +40,8 @@ hr {
   margin-left: 0px;
   height: 0%;
   border-radius: 5px;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
   transition: 2s ease-in-out height;
 }
 .barAnimate {
@@ -51,6 +51,6 @@ hr {
   height: 0%;
   border-radius: 5px;
 }
-.barMain:nth-child(odd) {
+/* .barMain:nth-child(odd) {
   background-image: linear-gradient(to bottom, #002403, #a07500, rgb(43, 4, 4));
-}
+} */

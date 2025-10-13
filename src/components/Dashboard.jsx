@@ -140,10 +140,10 @@ const Dashboard = () => {
                     Manage Parties
                 </p>
 
-                <p id='d5' className='dashMenu'onClick={toggleDashboard}>
+                {/* <p id='d5' className='dashMenu'onClick={toggleDashboard}>
                     <FontAwesomeIcon icon={faHandshake} className='mr-3'/>
                     Results
-                </p>
+                </p> */}
 
             </section>
 

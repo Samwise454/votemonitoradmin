@@ -169,6 +169,7 @@ const Agent = (props) => {
     const closeAddAgent = () => {
       setAddAgent(false);
       setWhichAgent("");
+      setWhichCollationAgent("");
     }
 
     const handleWhichAgent = (e) => {
@@ -180,6 +181,14 @@ const Agent = (props) => {
       let column = "";
       let whichData = "";
       stateLgaWardPoll(table, column, whichData);
+    }
+
+    const [whichCollationAgent, setWhichCollationAgent] = useState("");
+
+    const handleWhichCollation = (e) => {
+      let id = e.target.id;//eg lgc and wca
+      setWhichCollationAgent(id);
+      setFormData({...formData, agent: e.target.id});
     }
 
     const handleFormInput = (e) => {
@@ -289,6 +298,78 @@ const Agent = (props) => {
       e.preventDefault();
       showLoader();
 
+      const resetResp = () => {
+        setTimeout(() => {
+          setResp("");
+        }, 3000);
+      }
+
+      const resetForm = (agent) => {
+        if (agent ==="pa") {
+          let inputs = document.querySelectorAll(".formInput");
+          setFormData({
+              fname: "",
+              mname: "",
+              lname: "",
+              gender: "",
+              tel: "",
+              state: "",
+              lga: "",
+              ward: "",
+              poll: "",
+              agent: agent,
+              action: "addAgent",
+              admin: subadmin
+          });
+
+          inputs.forEach(element => {
+            element.value = "";
+          });
+        }
+        else if (agent === "lgc") {
+          let inputs = document.querySelectorAll(".formInput1");
+          setFormData({
+              fname: "",
+              mname: "",
+              lname: "",
+              gender: "",
+              tel: "",
+              state: "",
+              lga: "",
+              ward: "",
+              poll: "",
+              agent: agent,
+              action: "addAgent",
+              admin: subadmin
+          });
+
+          inputs.forEach(element => {
+            element.value = "";
+          });
+        }
+        else if (agent === "wca") {
+          let inputs = document.querySelectorAll(".formInput2");
+          setFormData({
+              fname: "",
+              mname: "",
+              lname: "",
+              gender: "",
+              tel: "",
+              state: "",
+              lga: "",
+              ward: "",
+              poll: "",
+              agent: agent,
+              action: "addAgent",
+              admin: subadmin
+          });
+
+          inputs.forEach(element => {
+            element.value = "";
+          });
+        }
+      }
+
       let fname = formData.fname;
       let mname = formData.mname;
       let lname = formData.lname;
@@ -304,36 +385,58 @@ const Agent = (props) => {
 
       if (agent === "ca") {
         //no polling unit
-        if (fname == "" || mname == "" || lname == "" || gender == "" || tel == "" || state == "" || lga == ""
-            || ward == "") {
+        if (whichCollationAgent === "lgc") {
+          if (fname == "" || mname == "" || lname == "" || gender == "" || tel == "" || state == "" || lga == "") {
             setResp("Fill all form input!");
+            resetResp();
             hideLoader();
             allow = "no";
+          }
         }
+        else if (whichCollationAgent === "wca") {
+          if (fname == "" || mname == "" || lname == "" || gender == "" || tel == "" || state == "" || lga == ""
+            || ward == "") {
+            setResp("Fill all form input!");
+            resetResp();
+            hideLoader();
+            allow = "no";
+          }
+        }
+        
       }
       else if (agent === "pa") {
         if (fname == "" || mname == "" || lname == "" || gender == "" || tel == "" || state == "" || lga == ""
             || ward == "" || poll == "") {
             setResp("Fill all form input!");
+            resetResp();
             allow = "no";
             hideLoader();
         }
       }
       if (allow === "yes") {
         let data = JSON.stringify(formData);
-        // console.log(data)
+        console.log(formData)
         hideLoader();
         const setData = async () => {
           try {
             const response = await axios.post(admin, data);
             if (response.status === 200) {
               setResp(response.data.msg);
+              resetResp();
+              if (agent === "pa") {
+                resetForm(agent);
+              }
+              else {
+                resetForm(whichCollationAgent);
+              }
             }
             else {
               setResp("Error processing!");
+              resetResp();
             }
           } catch (err) {
             setResp("Error processing!");
+            resetResp();
           } finally {
             hideLoader();
             if (dataState === false) {
@@ -383,103 +486,30 @@ const Agent = (props) => {
               <></>
             }
 
-            <button onClick={handleWhichAgent} id='ca' className='border-0 outline-0 bg-blue-800 text-white cursor-pointer px-5 py-2 rounded-sm mr-20'>
-              Collation Agents
-            </button>
+            {whichAgent == "" || whichAgent == "pa" ?
+                <>
+                  <button onClick={handleWhichAgent} id='ca' className='border-0 outline-0 bg-blue-800 text-white cursor-pointer px-5 py-2 rounded-sm mr-20'>
+                    Collation Agents
+                  </button>
 
-            <button onClick={handleWhichAgent} id='pa' className='border-0 outline-0 bg-blue-800 text-white cursor-pointer px-5 py-2 rounded-sm mr-20'>
-              Polling Agents
-            </button>
+                  <button onClick={handleWhichAgent} id='pa' className='border-0 outline-0 bg-blue-800 text-white cursor-pointer px-5 py-2 rounded-sm mr-20'>
+                    Polling Agents
+                  </button>
+                </>
+            :
+                <></>
+            }
           </div>
         :
           <></>
         }
 
         {whichAgent === "ca" ?
-          <>
-            <div>
-              <h2 className='bg-gray-100 w-fit p-2 mt-2'>Add Collation Agent</h2>
+            <div className='text-center mt-2 relative'>
+              <button id='lgc' onClick={handleWhichCollation} className='border-0 outline-0 bg-purple-900 text-white cursor-pointer px-5 py-2 rounded-sm mr-20'>LGA Collation Agent</button>
 
-              <form onSubmit={submitForm} className='agentForm bg-gray-100 mt-4 mb-4 shadow-sm p-4 text-sm relative'>
-                <FontAwesomeIcon icon={faCircleXmark} onClick={closeAddAgent} className='absolute top-0 right-0 mt-2 mr-2 text-2xl text-red-500 cursor-pointer'/>
-                <section className='flex flex-col'>
-                  {/* <label htmlFor="agentImg">Upload Image</label>
-                  <input onChange={handleFormInput} className='bg-white shadow-md rounded-md mb-8 px-3 py-2 cursor-pointer w-fit' type="file" id="agentImg"/> */}
-
-                  <label htmlFor="fName">First Name: </label>
-                  <input onChange={handleFormInput} className='bg-white outline-0 border-0 mb-8 shadow-md rounded-md px-3 py-2 w-fit' type="text" id='fName' placeholder='First Name' />
-
-                  <label htmlFor="tel">Phone Number: </label>
-                  <input onChange={handleFormInput} className='bg-white outline-0 border-0 mb-8 shadow-md rounded-md px-3 py-2 w-fit' type="tel" id='tel' placeholder='Phone Number' />
-
-                  <select onChange={handleFormInput} name="lga" id="lga" className='w-fit px-3 outline-0 border-0 py-2 rounded-md shadow-md bg-white cursor-pointer'>
-                    <option value="" hidden>Select LGA</option>
-                    {allLga.map((data, dataIndex) => {
-                      return (
-                        <option key={dataIndex} value={data.lgName+"_"+dataIndex}>{data.lgName}</option>
-                      );
-                    })}
-                  </select>
-
-                </section>
-
-                <section className='flex flex-col'>
-                  <label htmlFor="mName">Middle Name: </label>
-                  <input onChange={handleFormInput} className='bg-white outline-0 border-0 mb-8 shadow-md rounded-md px-3 py-2 w-fit' type="text" id='mName' placeholder='Middle Name' />
-
-                  <p>Choose Gender: </p>
-                  <select onChange={handleFormInput} name="gender" id="gender" className='w-fit px-3 mb-8 outline-0 border-0 py-2 rounded-md shadow-md bg-white cursor-pointer'>
-                    <option value="" hidden>Select Gender</option>
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                  </select>
-
-                  <select onChange={handleFormInput} name="ward" id="ward" className='w-fit px-3 outline-0 border-0 py-2 rounded-md shadow-md bg-white cursor-pointer'>
-                    <option value="" hidden>Select Ward</option>
-                    {allWard.map((data, dataIndex) => {
-                      return (
-                        <option key={dataIndex} value={data.ward+"_"+dataIndex}>{data.ward}</option>
-                      );
-                    })}
-                  </select>
-
-                  <div className="text-center">
-                    <section id="form_loader" className='loaderDiv mt-2'>
-                      <span className='loader'>
-
-                      </span>
-                    </section>
-
-                    {resp == "" ?
-                      <></>
-                    :
-                      <p className='text-sm'>
-                        {resp}
-                      </p>
-                    }
-
-                    <button type='submit' className='mt-4 bg-green-800 text-white w-fit px-4 py-2 rounded-sm cursor-pointer'>
-                      Submit
-                    </button>  
-                  </div> 
-                </section>
-
-                <section className='flex flex-col'>
-                  <label htmlFor="lName">Last Name: </label>
-                  <input onChange={handleFormInput} className='bg-white outline-0 border-0 mb-8 shadow-md rounded-md px-3 py-2 w-fit' type="text" id='lName' placeholder='Last Name' />
-
-                  <select onChange={handleFormInput} name="state" id="state" className='w-fit px-3 mb-8 mt-5 outline-0 border-0 py-2 rounded-md shadow-md bg-white cursor-pointer'>
-                    <option value="" hidden>Select State</option>
-                    {allState.map((data, dataIndex) => {
-                      return (
-                        <option key={dataIndex} value={data.stateName +"_"+data.wardCode}>{data.stateName}</option>
-                      );
-                    })}
-                  </select>
-                </section>
-              </form>
+              <button id='wca' onClick={handleWhichCollation} className='border-0 outline-0 bg-purple-900 text-white cursor-pointer px-5 py-2 rounded-sm mr-20'>Ward Collation Agent</button>
             </div>
-          </>
         :
           whichAgent === "pa" ?
             <>
@@ -493,12 +523,12 @@ const Agent = (props) => {
                     <input onChange={handleFormInput} className='bg-white shadow-md rounded-md mb-8 px-3 py-2 cursor-pointer w-fit' type="file" id="agentImg"/> */}
 
                     <label htmlFor="fName">First Name: </label>
-                    <input onChange={handleFormInput} className='bg-white outline-0 border-0 mb-8 shadow-md rounded-md px-3 py-2 w-fit' type="text" id='fName' placeholder='First Name' />
+                    <input onChange={handleFormInput} className='formInput bg-white outline-0 border-0 mb-8 shadow-md rounded-md px-3 py-2 w-fit' type="text" id='fName' placeholder='First Name' />
 
                     <label htmlFor="tel">Phone Number: </label>
-                    <input onChange={handleFormInput} className='bg-white outline-0 border-0 mb-8 shadow-md rounded-md px-3 py-2 w-fit' type="tel" id='tel' placeholder='Phone Number' />
+                    <input onChange={handleFormInput} className='formInput bg-white outline-0 border-0 mb-8 shadow-md rounded-md px-3 py-2 w-fit' type="tel" id='tel' placeholder='Phone Number' />
 
-                    <select onChange={handleFormInput} name="lga" id="lga" className='w-fit px-3 outline-0 border-0 py-2 rounded-md shadow-md bg-white cursor-pointer'>
+                    <select onChange={handleFormInput} name="lga" id="lga" className='formInput w-fit px-3 outline-0 border-0 py-2 rounded-md shadow-md bg-white cursor-pointer'>
                       <option value="" hidden>Select LGA</option>
                       {allLga.map((data, dataIndex) => {
                         return (
@@ -510,16 +540,16 @@ const Agent = (props) => {
 
                   <section className='flex flex-col'>
                     <label htmlFor="mName">Middle Name: </label>
-                    <input onChange={handleFormInput} className='bg-white outline-0 border-0 mb-8 shadow-md rounded-md px-3 py-2 w-fit' type="text" id='mName' placeholder='Middle Name' />
+                    <input onChange={handleFormInput} className='formInput bg-white outline-0 border-0 mb-8 shadow-md rounded-md px-3 py-2 w-fit' type="text" id='mName' placeholder='Middle Name' />
 
                     <p>Choose Gender: </p>
-                    <select onChange={handleFormInput} name="gender" id="gender" className='w-fit px-3 mb-8 outline-0 border-0 py-2 rounded-md shadow-md bg-white cursor-pointer'>
+                    <select onChange={handleFormInput} name="gender" id="gender" className='formInput w-fit px-3 mb-8 outline-0 border-0 py-2 rounded-md shadow-md bg-white cursor-pointer'>
                       <option value="" hidden>Select Gender</option>
                       <option value="male">Male</option>
                       <option value="female">Female</option>
                     </select>
 
-                    <select onChange={handleFormInput} name="ward" id="ward" className='w-fit px-3 outline-0 border-0 py-2 rounded-md shadow-md bg-white cursor-pointer'>
+                    <select onChange={handleFormInput} name="ward" id="ward" className='formInput w-fit px-3 outline-0 border-0 py-2 rounded-md shadow-md bg-white cursor-pointer'>
                       <option value="" hidden>Select Ward</option>
                       {allWard.map((data, dataIndex) => {
                         return (
@@ -538,12 +568,12 @@ const Agent = (props) => {
                       {resp == "" ?
                         <></>
                       :
-                        <p className='text-sm'>
+                        <p className='text-sm mt-3'>
                           {resp}
                         </p>
                       }
 
-                      <button type='submit' className='mt-10 bg-green-800 text-white w-fit px-4 py-2 rounded-sm cursor-pointer'>
+                      <button id='submit_Pa' type='submit' className='mt-10 bg-green-800 text-white w-fit px-4 py-2 rounded-sm cursor-pointer'>
                         Submit
                       </button>  
                     </div> 
@@ -551,9 +581,9 @@ const Agent = (props) => {
 
                   <section className='flex flex-col'>
                     <label htmlFor="lName">Last Name: </label>
-                    <input onChange={handleFormInput} className='bg-white outline-0 border-0 mb-8 shadow-md rounded-md px-3 py-2 w-fit' type="text" id='lName' placeholder='Last Name' />
+                    <input onChange={handleFormInput} className='formInput bg-white outline-0 border-0 mb-8 shadow-md rounded-md px-3 py-2 w-fit' type="text" id='lName' placeholder='Last Name' />
 
-                    <select onChange={handleFormInput} name="state" id="state" className='w-fit px-3 mt-5 mb-8 outline-0 border-0 py-2 rounded-md shadow-md bg-white cursor-pointer'>
+                    <select onChange={handleFormInput} name="state" id="state" className='formInput w-fit px-3 mt-5 mb-8 outline-0 border-0 py-2 rounded-md shadow-md bg-white cursor-pointer'>
                       <option value="" hidden>Select State</option>
                       {allState.map((data, dataIndex) => {
                         return (
@@ -562,7 +592,7 @@ const Agent = (props) => {
                       })}
                     </select>
 
-                    <select onChange={handleFormInput} name="punit" id="punit" className='w-fit px-3 outline-0 border-0 py-2 rounded-md shadow-md bg-white cursor-pointer'>
+                    <select onChange={handleFormInput} name="punit" id="punit" className='formInput w-fit px-3 outline-0 border-0 py-2 rounded-md shadow-md bg-white cursor-pointer'>
                       <option value="" hidden>Select Polling Unit</option>
                       {allPoll.map((data, dataIndex) => {
                         return (
@@ -574,6 +604,168 @@ const Agent = (props) => {
                 </form>
               </div>
             </>
+          :
+            <></>
+        }
+
+        {whichCollationAgent === "lgc" ?
+          <div>
+            <h2 className='bg-gray-100 w-fit p-2 mt-2'>Add LGA Collation Agent</h2>
+
+            <form onSubmit={submitForm} className='agentForm bg-gray-100 mt-4 mb-4 shadow-sm p-4 text-sm relative'>
+              <FontAwesomeIcon icon={faCircleXmark} onClick={closeAddAgent} className='absolute top-0 right-0 mt-2 mr-2 text-2xl text-red-500 cursor-pointer'/>
+              <section className='flex flex-col'>
+                {/* <label htmlFor="agentImg">Upload Image</label>
+                <input onChange={handleFormInput} className='bg-white shadow-md rounded-md mb-8 px-3 py-2 cursor-pointer w-fit' type="file" id="agentImg"/> */}
+
+                <label htmlFor="fName">First Name: </label>
+                <input onChange={handleFormInput} className='formInput1 bg-white outline-0 border-0 mb-8 shadow-md rounded-md px-3 py-2 w-fit' type="text" id='fName' placeholder='First Name' />
+
+                <label htmlFor="tel">Phone Number: </label>
+                <input onChange={handleFormInput} className='formInput1 bg-white outline-0 border-0 mb-8 shadow-md rounded-md px-3 py-2 w-fit' type="tel" id='tel' placeholder='Phone Number' />
+
+                <select onChange={handleFormInput} name="lga" id="lga" className='formInput1 w-fit px-3 outline-0 border-0 py-2 rounded-md shadow-md bg-white cursor-pointer'>
+                  <option value="" hidden>Select LGA</option>
+                  {allLga.map((data, dataIndex) => {
+                    return (
+                      <option key={dataIndex} value={data.lgName+"_"+dataIndex}>{data.lgName}</option>
+                    );
+                  })}
+                </select>
+
+              </section>
+
+              <section className='flex flex-col'>
+                <label htmlFor="mName">Middle Name: </label>
+                <input onChange={handleFormInput} className='formInput1 bg-white outline-0 border-0 mb-8 shadow-md rounded-md px-3 py-2 w-fit' type="text" id='mName' placeholder='Middle Name' />
+
+                <p>Choose Gender: </p>
+                <select onChange={handleFormInput} name="gender" id="gender" className='formInput1 w-fit px-3 mb-8 outline-0 border-0 py-2 rounded-md shadow-md bg-white cursor-pointer'>
+                  <option value="" hidden>Select Gender</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                </select>
+
+                <div className="text-center">
+                  <section id="form_loader" className='loaderDiv mt-2'>
+                    <span className='loader'>
+
+                    </span>
+                  </section>
+
+                  {resp == "" ?
+                    <></>
+                  :
+                    <p className='text-sm mt-3'>
+                      {resp}
+                    </p>
+                  }
+
+                  <button id='submit_Lgc' type='submit' className='mt-4 bg-green-800 text-white w-fit px-4 py-2 rounded-sm cursor-pointer'>
+                    Submit
+                  </button>  
+                </div> 
+              </section>
+
+              <section className='flex flex-col'>
+                <label htmlFor="lName">Last Name: </label>
+                <input onChange={handleFormInput} className='formInput1 bg-white outline-0 border-0 mb-8 shadow-md rounded-md px-3 py-2 w-fit' type="text" id='lName' placeholder='Last Name' />
+
+                <select onChange={handleFormInput} name="state" id="state" className='formInput1 w-fit px-3 mb-8 mt-5 outline-0 border-0 py-2 rounded-md shadow-md bg-white cursor-pointer'>
+                  <option value="" hidden>Select State</option>
+                  {allState.map((data, dataIndex) => {
+                    return (
+                      <option key={dataIndex} value={data.stateName +"_"+data.wardCode}>{data.stateName}</option>
+                    );
+                  })}
+                </select>
+              </section>
+            </form>
+          </div>
+        :
+          whichCollationAgent === "wca" ?
+              <div>
+                <h2 className='bg-gray-100 w-fit p-2 mt-2'>Add Ward Collation Agent</h2>
+
+                <form onSubmit={submitForm} className='agentForm bg-gray-100 mt-4 mb-4 shadow-sm p-4 text-sm relative'>
+                  <FontAwesomeIcon icon={faCircleXmark} onClick={closeAddAgent} className='absolute top-0 right-0 mt-2 mr-2 text-2xl text-red-500 cursor-pointer'/>
+                  <section className='flex flex-col'>
+                    {/* <label htmlFor="agentImg">Upload Image</label>
+                    <input onChange={handleFormInput} className='bg-white shadow-md rounded-md mb-8 px-3 py-2 cursor-pointer w-fit' type="file" id="agentImg"/> */}
+
+                    <label htmlFor="fName">First Name: </label>
+                    <input onChange={handleFormInput} className='formInput2 bg-white outline-0 border-0 mb-8 shadow-md rounded-md px-3 py-2 w-fit' type="text" id='fName' placeholder='First Name' />
+
+                    <label htmlFor="tel">Phone Number: </label>
+                    <input onChange={handleFormInput} className='formInput2 bg-white outline-0 border-0 mb-8 shadow-md rounded-md px-3 py-2 w-fit' type="tel" id='tel' placeholder='Phone Number' />
+
+                    <select onChange={handleFormInput} name="lga" id="lga" className='formInput2 w-fit px-3 outline-0 border-0 py-2 rounded-md shadow-md bg-white cursor-pointer'>
+                      <option value="" hidden>Select LGA</option>
+                      {allLga.map((data, dataIndex) => {
+                        return (
+                          <option key={dataIndex} value={data.lgName+"_"+dataIndex}>{data.lgName}</option>
+                        );
+                      })}
+                    </select>
+
+                  </section>
+
+                  <section className='flex flex-col'>
+                    <label htmlFor="mName">Middle Name: </label>
+                    <input onChange={handleFormInput} className='formInput2 bg-white outline-0 border-0 mb-8 shadow-md rounded-md px-3 py-2 w-fit' type="text" id='mName' placeholder='Middle Name' />
+
+                    <p>Choose Gender: </p>
+                    <select onChange={handleFormInput} name="gender" id="gender" className='formInput2 w-fit px-3 mb-8 outline-0 border-0 py-2 rounded-md shadow-md bg-white cursor-pointer'>
+                      <option value="" hidden>Select Gender</option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                    </select>
+
+                    <select onChange={handleFormInput} name="ward" id="ward" className='formInput2 w-fit px-3 outline-0 border-0 py-2 rounded-md shadow-md bg-white cursor-pointer'>
+                      <option value="" hidden>Select Ward</option>
+                      {allWard.map((data, dataIndex) => {
+                        return (
+                          <option key={dataIndex} value={data.ward+"_"+dataIndex}>{data.ward}</option>
+                        );
+                      })}
+                    </select>
+
+                    <div className="text-center">
+                      <section id="form_loader" className='loaderDiv mt-2'>
+                        <span className='loader'>
+
+                        </span>
+                      </section>
+
+                      {resp == "" ?
+                        <></>
+                      :
+                        <p className='text-sm mt-3'>
+                          {resp}
+                        </p>
+                      }
+
+                      <button id='submit_Wca' type='submit' className='mt-4 bg-green-800 text-white w-fit px-4 py-2 rounded-sm cursor-pointer'>
+                        Submit
+                      </button>  
+                    </div> 
+                  </section>
+
+                  <section className='flex flex-col'>
+                    <label htmlFor="lName">Last Name: </label>
+                    <input onChange={handleFormInput} className='formInput2 bg-white outline-0 border-0 mb-8 shadow-md rounded-md px-3 py-2 w-fit' type="text" id='lName' placeholder='Last Name' />
+
+                    <select onChange={handleFormInput} name="state" id="state" className='formInput w-fit px-3 mb-8 mt-5 outline-0 border-0 py-2 rounded-md shadow-md bg-white cursor-pointer'>
+                      <option value="" hidden>Select State</option>
+                      {allState.map((data, dataIndex) => {
+                        return (
+                          <option key={dataIndex} value={data.stateName +"_"+data.wardCode}>{data.stateName}</option>
+                        );
+                      })}
+                    </select>
+                  </section>
+                </form>
+              </div>
           :
             <></>
         }

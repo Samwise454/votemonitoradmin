@@ -32,8 +32,8 @@ const Alarm = (props) => {
         user: userData
     });
 
-    const [lastCount, setLastCount] = useState(0);
-    const eventSourceLink = props.api + `/getstream.php?subadmin=${userData}&lastcount=${lastCount}`;
+    // const [lastCount, setLastCount] = useState(0);
+    // const eventSourceLink = props.api + `/getstream.php?subadmin=${userData}&lastcount=${lastCount}`;
 
     const handleInput = (e) => {
         let id = e.target.id;
