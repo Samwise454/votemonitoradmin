@@ -33,6 +33,7 @@ const Dash = (props) => {
   const [partyAcronym, setPartyAcronym] = useState(["","","","","",""]);
 
   const [partyPercent, setPartyPercent] = useState([0,0,0,0,0,0]);
+  const [winner, setWinner] = useState(0);
 
   useEffect(() => {
       if (loginDet === null) {
@@ -126,6 +127,9 @@ const Dash = (props) => {
                         awrDenom: awrDenom
                     });
                     setPartyPercent([party1, party2, party3, party4, party5, party6,]);
+                    let partyArray = [party1, party2, party3, party4, party5, party6,];
+                    let maxPercent = Math.max(...partyArray);
+                    setWinner(maxPercent);
                     setLastCount(lastcount);
                     // console.log(dashData);
                 }
@@ -157,24 +161,24 @@ const Dash = (props) => {
   }, [trigger]);
 
   const [partyBg, setPartyBg] = useState({
-    A: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25',
-    AA: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25',
-    AAC: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25',
-    ADC: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25',
-    ADP: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25',
-    APC: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25',
-    APGA: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25',
-    APM: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25',
-    APP: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25',
-    BP: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25',
-    LP: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25',
-    NNPP: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25',
-    NRM: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25',
-    PDP: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25',
-    PRP: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25',
-    SDP: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25',
-    YPP: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25',
-    ZLP: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25',
+    A: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25 relative',
+    AA: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25 relative',
+    AAC: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25 relative',
+    ADC: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25 relative',
+    ADP: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25 relative',
+    APC: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25 relative',
+    APGA: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25 relative',
+    APM: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25 relative',
+    APP: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25 relative',
+    BP: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25 relative',
+    LP: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25 relative',
+    NNPP: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25 relative',
+    NRM: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25 relative',
+    PDP: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25 relative',
+    PRP: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25 relative',
+    SDP: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25 relative',
+    YPP: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25 relative',
+    ZLP: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25 relative',
   });
 
   const [resultStat, setResultState] = useState(false);
@@ -258,6 +262,12 @@ const Dash = (props) => {
 
   const [adminData, setAdminData] = useState([]);
   const [location, setLocation] = useState("");
+
+  const [awrData, setAwrData] = useState({
+    electionProfile: "",
+    lga: "",
+    state: ""
+  });
 
   useEffect(() => { //let's fetch the election type pres, guber, sen or lga
         let data = {
@@ -384,7 +394,7 @@ const Dash = (props) => {
   }
 
   const closeResult = (data) => {
-    if (data == "true") {
+    if (data == "true" || data == "dash") {
       setResultState(false);
       setWhat("");
     }
@@ -392,6 +402,12 @@ const Dash = (props) => {
 
   const showAwr = (e) => {
     setWhat("awr");
+    setAwrData({
+      electionProfile: electionProfile,
+      lga: adminData.lga,
+      state: selectedState,
+      from: "dash"
+    })
     setResultState(true);
   }
 
@@ -448,30 +464,30 @@ const Dash = (props) => {
 
             <div className='text-l'>
               <table>
-                  <tbody className='text-sm text-nowrap leading-6.5'>
+                  <tbody className='text-sm text-nowrap leading-7'>
                       <tr>
                           <td className='pl-1 text-sm'>Registered Voters:</td>
-                          <td className='text-right pl-3 pr-1 font-bold text-purple-700'>{allResult.regVoter}</td>
+                          <td className='text-right pl-3 pr-1 font-bold text-[16px] text-purple-700'>{allResult.regVoter}</td>
                       </tr>
 
                       <tr>
                           <td className='pl-1 text-sm'>Accredited Voters:</td>
-                          <td className='text-right pl-3 pr-1 font-bold text-green-700'>{allResult.accredVoter}</td>
+                          <td className='text-right pl-3 pr-1 font-bold text-[16px] text-green-700'>{allResult.accredVoter}</td>
                       </tr>
 
                       <tr>
                           <td className='pl-1 text-sm'>Total Votes Cast:</td>
-                          <td className='text-right pl-3 pr-1 font-bold text-blue-700'>{allResult.validVoter}</td>
+                          <td className='text-right pl-3 pr-1 font-bold text-[16px] text-blue-700'>{allResult.validVoter}</td>
                       </tr>
 
                       <tr>
                           <td className='pl-1 text-sm'>Invalid Votes:</td>
-                          <td className='text-right pl-3 pr-1 font-bold text-yellow-700'>{allResult.invalidVote}</td>
+                          <td className='text-right pl-3 pr-1 font-bold text-[16px] text-yellow-700'>{allResult.invalidVote}</td>
                       </tr>
 
                       <tr>
                           <td title='Click to View Awaiting Results' onClick={showAwr} className='pl-1'><button className='bg-red-700 text-white rounded-sm px-2 mt-1 cursor-pointer outline-0 border-0'>AWR</button></td>
-                          <td className='text-right pl-3 pr-1 font-bold'><span className='text-red-700'>{allResult.awrNumer}</span> / <span>{allResult.awrDenom }</span></td>
+                          <td className='text-right pl-3 pr-1 font-bold text-[16px]'><span className='text-red-700'>{allResult.awrNumer}</span> / <span>{allResult.awrDenom }</span></td>
                       </tr>
                   </tbody>
               </table>
@@ -489,13 +505,19 @@ const Dash = (props) => {
                 :
                   <div>
                       {/* <img src={img + partyAcronym[0] + ".jpeg"} id="logo1" className='cursor-pointer rounded-sm w-10 h-10 mt-1 mr-2' alt="Party logo" /> */}
-                      <p className='text-sm'><span className='bg-yellow-200 rounded-sm text-black px-2 py-1 font-semibold'>{partyAcronym[0]}</span></p>
+                      <p className='text-sm'><span className='bg-[#FFD700] rounded-sm text-black px-2 py-1 font-semibold'>{partyAcronym[0]}</span></p>
                   </div>
                 }
                 <section className='voteCount mt-3 shadow-md p-1 text-center'>
                     <p className='font-bold text-lg'>{partyPercent[0]}</p>
                 </section>
               </div>
+
+              {winner == partyPercent[0] ?
+                <div className='absolute bottom-0 h-2 w-15 ml-3 mb-0 bg-red-600 animate__animated animate__zoomIn rounded-full'></div>
+              :
+                <div className='absolute bottom-0 h-2 w-15 ml-3 mb-0 bg-red-600 animate__animated animate__zoomOut rounded-full'></div>
+              }
             </section>
 
             <section className={partyBg[partyAcronym[1]]}>
@@ -515,6 +537,12 @@ const Dash = (props) => {
                     <p className='font-bold text-lg'>{partyPercent[1]}</p>
                 </section>
               </div>
+
+              {winner == partyPercent[1] ?
+                <div className='absolute bottom-0 h-2 w-15 ml-3 mb-0 bg-red-600 animate__animated animate__zoomIn rounded-full'></div>
+              :
+                <div className='absolute bottom-0 h-2 w-15 ml-3 mb-0 bg-red-600 animate__animated animate__zoomOut rounded-full'></div>
+              }
             </section>
 
             <section className={partyBg[partyAcronym[2]]}>
@@ -527,13 +555,19 @@ const Dash = (props) => {
                 :
                   <div>
                       {/* <img src={img + partyAcronym[0] + ".jpeg"} id="logo1" className='cursor-pointer rounded-sm w-10 h-10 mt-1 mr-2' alt="Party logo" /> */}
-                      <p className='text-sm'><span className='bg-red-200 rounded-sm text-black px-2 py-1 font-semibold'>{partyAcronym[2]}</span></p>
+                      <p className='text-sm'><span className='bg-blue-200 rounded-sm text-black px-2 py-1 font-semibold'>{partyAcronym[2]}</span></p>
                   </div>
                 }
                 <section className='voteCount mt-3 shadow-md p-1 text-center'>
                     <p className='font-bold text-lg'>{partyPercent[2]}</p>
                 </section>
               </div>
+
+              {winner == partyPercent[2] ?
+                <div className='absolute bottom-0 h-2 w-15 ml-3 mb-0 bg-red-600 animate__animated animate__zoomIn rounded-full'></div>
+              :
+                <div className='absolute bottom-0 h-2 w-15 ml-3 mb-0 bg-red-600 animate__animated animate__zoomOut rounded-full'></div>
+              }
             </section>
 
             <section className={partyBg[partyAcronym[3]]}>
@@ -546,13 +580,19 @@ const Dash = (props) => {
                 :
                   <div>
                       {/* <img src={img + partyAcronym[0] + ".jpeg"} id="logo1" className='cursor-pointer rounded-sm w-10 h-10 mt-1 mr-2' alt="Party logo" /> */}
-                      <p className='text-sm'><span className='bg-blue-200 rounded-sm text-black px-2 py-1 font-semibold'>{partyAcronym[3]}</span></p>
+                      <p className='text-sm'><span className='bg-gradient-to-r from-red-300 via-white to-red-300 rounded-sm text-black px-2 py-1 font-semibold'>{partyAcronym[3]}</span></p>
                   </div>
                 }
                 <section className='voteCount mt-3 shadow-md p-1 text-center'>
                     <p className='font-bold text-lg'>{partyPercent[3]}</p>
                 </section>
               </div>
+
+              {winner == partyPercent[3] ?
+                <div className='absolute bottom-0 h-2 w-15 ml-3 mb-0 bg-red-600 animate__animated animate__zoomIn rounded-full'></div>
+              :
+                <div className='absolute bottom-0 h-2 w-15 ml-3 mb-0 bg-red-600 animate__animated animate__zoomOut rounded-full'></div>
+              }
             </section>
 
             <section className={partyBg[partyAcronym[4]]}>
@@ -565,13 +605,19 @@ const Dash = (props) => {
                 :
                   <div>
                       {/* <img src={img + partyAcronym[0] + ".jpeg"} id="logo1" className='cursor-pointer rounded-sm w-10 h-10 mt-1 mr-2' alt="Party logo" /> */}
-                      <p className='text-sm'><span className='bg-gray-200 rounded-sm text-black px-2 py-1 font-semibold'>{partyAcronym[4]}</span></p>
+                      <p className='text-sm'><span className='bg-red-200 rounded-sm text-black px-2 py-1 font-semibold'>{partyAcronym[4]}</span></p>
                   </div>
                 }
                 <section className='voteCount mt-3 shadow-md p-1 text-center'>
                     <p className='font-bold text-lg'>{partyPercent[4]}</p>
                 </section>
               </div>
+
+              {winner == partyPercent[4] ?
+                <div className='absolute bottom-0 h-2 w-15 ml-3 mb-0 bg-red-600 animate__animated animate__zoomIn rounded-full'></div>
+              :
+                <div className='absolute bottom-0 h-2 w-15 ml-3 mb-0 bg-red-600 animate__animated animate__zoomOut rounded-full'></div>
+              }
             </section>
 
             <section className={partyBg[partyAcronym[5]]}>
@@ -584,13 +630,19 @@ const Dash = (props) => {
                 :
                   <div>
                       {/* <img src={img + partyAcronym[0] + ".jpeg"} id="logo1" className='cursor-pointer rounded-sm w-10 h-10 mt-1 mr-2' alt="Party logo" /> */}
-                      <p className='text-sm'><span className='bg-purple-200 rounded-sm text-black px-2 py-1 font-semibold'>{partyAcronym[5]}</span></p>
+                      <p className='text-sm'><span className='bg-yellow-200 rounded-sm text-black px-2 py-1 font-semibold'>{partyAcronym[5]}</span></p>
                   </div>
                 }
                 <section className='voteCount mt-3 shadow-md p-1 text-center'>
                     <p className='font-bold text-lg'>{partyPercent[5]}</p>
                 </section>
               </div>
+
+              {winner == partyPercent[5] ?
+                <div className='absolute bottom-0 h-2 w-15 ml-3 mb-0 bg-red-600 animate__animated animate__zoomIn rounded-full'></div>
+              :
+                <div className='absolute bottom-0 h-2 w-15 ml-3 mb-0 bg-red-600 animate__animated animate__zoomOut rounded-full'></div>
+              }
             </section>
           </div>
           </div>
@@ -605,7 +657,7 @@ const Dash = (props) => {
                     <tr><td className='text-[13px]'>60<hr className='tableHr'/></td></tr>
                     <tr><td className='text-[13px]'>50<hr className='tableHr'/></td></tr>
                     <tr><td className='text-[13px]'>40<hr className='tableHr'/></td></tr>
-                    <tr><td className='text-[13px]'>20<hr className='tableHr'/></td></tr>
+                    <tr><td className='text-[13px]'>30<hr className='tableHr'/></td></tr>
                     <tr><td className='text-[13px]'>20<hr className='tableHr'/></td></tr>
                     <tr><td className='text-[13px]'>10<hr className='tableHr'/></td></tr>
                     <tr><td className='text-[13px]'>0<hr className='tableHr'/></td></tr>
@@ -617,7 +669,7 @@ const Dash = (props) => {
                     return (
                       <section key={dataIndex} className='barDiv flex align-center justify-center flex-col relative'>
                         <div id={"bar_"+dataIndex} className="barMain w-full mb-6 bg-gradient-to-t from-blue-600 to-cyan-400 ml-1">
-                          <div className="barVal absolute -mt-5 rounded-full bg-black text-white shadow-sm top-0 w-fit p-1 px-1.5 text-center text-sm">
+                          <div className="barVal absolute -mt-8 rounded-full bg-black text-white shadow-sm top-0 w-fit p-1 px-1.5 text-center text-sm">
                             {chartData[dataIndex] + " %"}
                           </div>
                         </div>  
@@ -638,7 +690,7 @@ const Dash = (props) => {
           </div>
         </div>
       :
-        <Result what={what} wardCode={wardCode} onClick={closeResult} isSet={true} location={location}/>
+        <Result what={what} wardCode={wardCode} onClick={closeResult} state={selectedState} isSet={true} location={location} awrData={awrData}/>
       }
     </div>
   )

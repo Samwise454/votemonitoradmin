@@ -52,6 +52,9 @@ const Result = (props) => {
     const [awr, setAwr] = useState([]);
     const [wardAwr, setWardAwr] = useState([]);
     const [pollAwr, setPollAwr] = useState([]);
+    const awrState = useState(props.state);
+
+    const [awrDataDash, setAwrDataDash] = useState(props.awrData);
 
     //fetch individual lga or state or ward results at first load
     useEffect(() => {
@@ -216,24 +219,24 @@ const Result = (props) => {
     // });
 
     const [partyBg, setPartyBg] = useState({
-        A: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25',
-        AA: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25',
-        AAC: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25',
-        ADC: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25',
-        ADP: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25',
-        APC: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25',
-        APGA: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25',
-        APM: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25',
-        APP: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25',
-        BP: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25',
-        LP: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25',
-        NNPP: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25',
-        NRM: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25',
-        PDP: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25',
-        PRP: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25',
-        SDP: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25',
-        YPP: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25',
-        ZLP: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25',
+        A: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25 relative',
+        AA: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25 relative',
+        AAC: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25 relative',
+        ADC: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25 relative',
+        ADP: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25 relative',
+        APC: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25 relative',
+        APGA: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25 relative',
+        APM: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25 relative',
+        APP: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25 relative',
+        BP: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25 relative',
+        LP: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25 relative',
+        NNPP: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25 relative',
+        NRM: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25 relative',
+        PDP: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25 relative',
+        PRP: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25 relative',
+        SDP: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25 relative',
+        YPP: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25 relative',
+        ZLP: 'flex flex-row shadow-md p-2 rounded-sm w-full mx-3 bg-white text-sm items-center min-w-25 relative',
     });
 
     const [goBack, setGoBack] = useState(false);
@@ -298,12 +301,24 @@ const Result = (props) => {
                     fetchEachResult("lga", btnVal);
                     setWhichResult("lga");
                     setLocation(btnVal);
+                    // setAwrDataDash({
+                    //     electionProfile: electionProfile,
+                    //     lga: btnVal,
+                    //     state: awrState,
+                    //     form: "dash"
+                    // });
                     break;
                 case 'ward':
                     setSelectedLg(idValue);
                     fetchEachResult("ward", btnVal);
                     setWhichResult("ward");
                     setLocation(btnVal);
+                    // setAwrDataDash({
+                    //     electionProfile: electionProfile,
+                    //     lga: btnVal,
+                    //     state: awrState,
+                    //     form: "dash"
+                    // });
                     break;
                 case 'poll':
                     setSelectedWard(idValue);
@@ -428,12 +443,19 @@ const Result = (props) => {
     //handle what clicking awr button does
     const showAwr = (e) => {
         setWhat("awr");
+        setAwrDataDash({
+            electionProfile: electionProfile,
+            lga: "AGUATA",
+            state: "Anambra",
+            from: "dash"
+        })
+        console.log(awrDataDash);
     }
 
   return (
     <div className='relative'>
         {what === "awr" ?
-            <h2 className='mt-3 text-xl mb-2 w-full'>All Results for <b>{adminData.eProfile}</b></h2>
+            <h2 className='mt-3 text-xl mb-2 w-full'><b>Awaiting Results</b></h2>
         :
             <h2 className='mt-3 text-xl mb-2 w-full'>All Results for <b>{adminData.eProfile}</b></h2>
         }
@@ -479,11 +501,11 @@ const Result = (props) => {
                                     allLga.map((data, dataIndex) => {
                                         return (
                                             <div key={dataIndex} className='eachState mb-10'>
-                                                <p>
+                                                <div className='relative'>
                                                     <button onClick={switchMenu} id={"ward_"+data.lgName} value={data.lgName} className='eachStateBtn bg-purple-900 text-white px-2 w-full cursor-pointer text-center rounded-sm mt-4'>
                                                         {data.lgName}
                                                     </button>
-                                                </p>
+                                                </div>
                                                 <div className='stateData ml-10'>
                                                     <section className='misc1 flex flex-row mb-1'>
                                                         <div className="shadow-sm rounded-sm p-1">
@@ -529,7 +551,7 @@ const Result = (props) => {
                                                             </section>
                                                         </div>
 
-                                                        <div className='flex flex-row bg-gray-200 shadow-md rounded-sm py-2 items-center jusify-items-center'>
+                                                        <div className='flex flex-row bg-gray-200 shadow-md rounded-sm py-2 items-center jusify-items-center relative'>
                                                             <div className={partyBg[acronym[0]]}>
                                                                 <div className='flex flex-col my-4 w-full text-center'>
                                                                     <section className='partyImgDiv text-sm'>
@@ -625,6 +647,15 @@ const Result = (props) => {
                                                                     </section>
                                                                 </div>
                                                             </div>
+
+                                                            {isLgaSet == false ?
+                                                                <></>
+                                                            :
+                                                                lgaResult[dataIndex]["overVote"] == 0 ?
+                                                                    <></>
+                                                                :
+                                                                    <p className='absolute top-0 h-2 w-40 bg-red-600 ml-70 -mt-2 rounded-tr-full rounded-tl-full animate__animated animate__zoomIn'></p>
+                                                            }
                                                         </div>
                                                     </section>
                                                 </div>
@@ -691,7 +722,7 @@ const Result = (props) => {
                                                                 </section>
                                                             </div>
 
-                                                            <div className='flex flex-row bg-gray-200 shadow-md rounded-sm py-2 items-center jusify-items-center'>
+                                                            <div className='flex flex-row bg-gray-200 shadow-md rounded-sm py-2 items-center jusify-items-center relative'>
                                                                 <div className={partyBg[acronym[0]]}>
                                                                     <div className='flex flex-col my-4 w-full text-center'>
                                                                         <section className='partyImgDiv text-sm'>
@@ -787,6 +818,15 @@ const Result = (props) => {
                                                                         </section>
                                                                     </div>
                                                                 </div>
+
+                                                                {isWardSet == false ?
+                                                                    <></>
+                                                                :
+                                                                    wardResult[dataIndex]["overVote"] == 0 ?
+                                                                        <></>
+                                                                    :
+                                                                        <p className='absolute top-0 h-2 w-40 bg-red-600 ml-70 -mt-2 rounded-tr-full rounded-tl-full animate__animated animate__zoomIn'></p>
+                                                                }
                                                             </div>
                                                         </section>
                                                     </div>
@@ -800,7 +840,7 @@ const Result = (props) => {
                                         <section className='leading-15 p-2'>
                                             {allPoll.map((data, dataIndex) => {
                                                 return (
-                                                    <div key={dataIndex} className='eachState'>
+                                                    <div key={dataIndex} className='eachState mb-10'>
                                                         <p>
                                                             <button onClick={switchMenu} id={"eachpoll_"+data.id} className='eachStateBtn bg-purple-900 text-white px-2 py-1 w-full cursor-pointer text-center rounded-sm mt-4 '>
                                                                 {data.pollUnit}
@@ -841,17 +881,17 @@ const Result = (props) => {
                                                                             <p className='partyText font-bold w-full text-right ml-1 text-yellow-700'>{pollResult[dataIndex]["invalidVote"]}</p>
                                                                         }
                                                                     </section>
-                                                                    {/* <section className='text-sm text-nowrap bg-gray-100 p-1 flex flex-row'>
+                                                                    <section className='text-sm text-nowrap bg-gray-100 p-1 flex flex-row'>
                                                                         <p className='partyText' onClick={showAwr} title='Click to View Awaiting Results'><span className='bg-red-700 text-white rounded-sm p-1 cursor-pointer'>AWR</span> </p>
                                                                         {isPollSet == false ?
                                                                             <p className='partyText font-bold w-full text-right ml-1'><span className='text-red-700'>Nil</span> / <span>0</span></p>
                                                                         :
                                                                             <p className='partyText font-bold w-full text-right ml-1'><span className='text-red-700'>{wardAwr[dataIndex]["awrNumer"]}</span> / <span>{wardAwr[dataIndex]["awrDenom"]}</span></p>
                                                                         }
-                                                                    </section> */}
+                                                                    </section>
                                                                 </div>
 
-                                                                <div className='flex flex-row bg-gray-200 shadow-md rounded-sm py-2 items-center jusify-items-center'>
+                                                                <div className='flex flex-row bg-gray-200 shadow-md rounded-sm py-2 items-center jusify-items-center relative'>
                                                                     <div className={partyBg[acronym[0]]}>
                                                                         <div className='flex flex-col my-4 w-full text-center'>
                                                                             <section className='partyImgDiv text-sm'>
@@ -947,6 +987,15 @@ const Result = (props) => {
                                                                             </section>
                                                                         </div>
                                                                     </div>
+
+                                                                    {isPollSet == false ?
+                                                                        <></>
+                                                                    :
+                                                                        pollResult[dataIndex]["overVote"] == 0 ?
+                                                                            <></>
+                                                                        :
+                                                                            <p className='absolute top-0 h-2 w-40 bg-red-600 ml-70 -mt-2 rounded-tr-full rounded-tl-full animate__animated animate__zoomIn'></p>
+                                                                    }
                                                                 </div>
                                                             </section>
                                                         </div>
@@ -957,7 +1006,7 @@ const Result = (props) => {
                                         </section>
                                     :
                                         what === "awr" ?
-                                            <Awr/>
+                                            <Awr onClick={closeResult} awrData={awrDataDash} api={api}/>
                                         :
                                             <></>
                 }

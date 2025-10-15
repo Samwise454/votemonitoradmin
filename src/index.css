@@ -49,4 +49,13 @@ body {
     opacity: 0;
   }
 }
-
+.awrMain {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  place-items: center;
+  gap: 20px;
+}
+.eachAwr:hover {
+  color: rgb(238, 0, 155);
+  transition: all 0.4s ease-in-out;
+}
