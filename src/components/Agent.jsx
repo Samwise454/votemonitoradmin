@@ -191,6 +191,13 @@ const Agent = (props) => {
       setFormData({...formData, agent: e.target.id});
     }
 
+    // const [statePollVal, setStatePollVal] = useState({
+    //   val1: "",
+    //   val2: "",
+    //   val3: "",
+    //   val4: ""
+    // });
+
     const handleFormInput = (e) => {
       let id = e.target.id;
       let val = e.target.value.split("_");
@@ -247,6 +254,75 @@ const Agent = (props) => {
       }
     }
 
+    //check if state has been selected so we can use the index to get the poll unit initial code
+    // useEffect(() => {
+    //   if (formData.state !== "") {
+    //     let dataArray = [];
+    //     for (let i = 0; i < allState.length; i++) {
+    //       let eachState = allState[i]['stateName'];
+    //       dataArray.push(eachState);
+    //     }
+
+    //     let pollVal = dataArray.indexOf(formData.state) + 1;
+    //     if (pollVal < 10) {
+    //       setStatePollVal({...statePollVal, val1: "0"+pollVal}); 
+    //     }
+    //     else {
+    //       setStatePollVal({...statePollVal, val1: pollVal});
+    //     }
+    //   }
+      
+    //   if (formData.lga !== "") {
+    //     let dataArray = [];
+    //     for (let i = 0; i < allLga.length; i++) {
+    //       let eachLg = allLga[i]['lgName'];
+    //       dataArray.push(eachLg);
+    //     }
+    //     let pollVal = dataArray.indexOf(formData.lga) + 1;
+    //     if (pollVal < 10) {
+    //       setStatePollVal({...statePollVal, val2: "0"+pollVal}); 
+    //     }
+    //     else {
+    //       setStatePollVal({...statePollVal, val2: pollVal});
+    //     }
+    //   }
+
+    //   if (formData.ward !== "") {
+    //     let dataArray = [];
+    //     for (let i = 0; i < allWard.length; i++) {
+    //       let eachWard = allWard[i]['ward'];
+    //       dataArray.push(eachWard);
+    //     }
+    //     let pollVal = dataArray.indexOf(formData.ward) + 1;
+    //     if (pollVal < 10) {
+    //       setStatePollVal({...statePollVal, val3: "0"+pollVal}); 
+    //     }
+    //     else {
+    //       setStatePollVal({...statePollVal, val3: pollVal});
+    //     }
+    //   }
+
+    //   if (formData.poll !== "") {
+    //     let dataArray = [];
+    //     for (let i = 0; i < allPoll.length; i++) {
+    //       let eachPoll = allPoll[i]['pollUnitName'];
+    //       dataArray.push(eachPoll);
+    //     }
+    //     let pollVal = dataArray.indexOf(formData.poll) + 1;
+    //     let telVal = "";
+    //     if (pollVal < 10) {
+    //       setStatePollVal({...statePollVal, val4: "00"+pollVal}); 
+    //       telVal = "00"+pollVal;
+    //     }
+    //     else {
+    //       setStatePollVal({...statePollVal, val4: "0"+pollVal});
+    //       telVal = "0"+pollVal;
+    //     }
+
+    //     setFormData({...formData, tel: statePollVal.val1+"/"+statePollVal.val2+"/"+statePollVal.val3+"/"+telVal});
+    //   }
+    // }, [formData]);
+
     const editItem = (e) => {
 
     }
@@ -261,7 +337,7 @@ const Agent = (props) => {
         loader.style.display = "none";
     }
 
-    const stateLgaWardPoll = (table, column, whichData) => {
+    const stateLgaWardPoll = (table, column, whichData) => {//value is either Aguata or Ogbaru or Anambra
       let d = {
         key: table,
         column: column,
@@ -272,7 +348,7 @@ const Agent = (props) => {
       const fetchAll = async () => {
           try {
             const response = await axios.post(getstateco, data);
-            // console.log(response.data);
+            // console.log(data);
             if (response.status === 200) {
               if (table === "state") {
                 setAllState(response.data);
@@ -285,6 +361,7 @@ const Agent = (props) => {
               }
               else if (table === "poll") {
                 setAllPoll(response.data);
+                // console.log(response.data)
               }
             }
           } catch (err) {
@@ -321,6 +398,13 @@ const Agent = (props) => {
               action: "addAgent",
               admin: subadmin
           });
+
+          // setStatePollVal({
+          //   val1: "",
+          //   val2: "",
+          //   val3: "",
+          //   val4: ""
+          // });
 
           inputs.forEach(element => {
             element.value = "";
@@ -374,13 +458,13 @@ const Agent = (props) => {
       let mname = formData.mname;
       let lname = formData.lname;
       let gender = formData.gender;
-      let tel = formData.tel;
       let state = formData.state;
       let lga = formData.lga;
       let ward = formData.ward;
       let poll = formData.poll;
       let agent = formData.agent;
-    
+      let tel = formData.tel;
+// console.log(formData)
       let allow = "yes";
 
       if (agent === "ca") {
@@ -415,7 +499,6 @@ const Agent = (props) => {
       }
       if (allow === "yes") {
         let data = JSON.stringify(formData);
-        console.log(formData)
         hideLoader();
         const setData = async () => {
           try {
@@ -525,10 +608,14 @@ const Agent = (props) => {
                     <label htmlFor="fName">First Name: </label>
                     <input onChange={handleFormInput} className='formInput bg-white outline-0 border-0 mb-8 shadow-md rounded-md px-3 py-2 w-fit' type="text" id='fName' placeholder='First Name' />
 
-                    <label htmlFor="tel">Phone Number: </label>
-                    <input onChange={handleFormInput} className='formInput bg-white outline-0 border-0 mb-8 shadow-md rounded-md px-3 py-2 w-fit' type="tel" id='tel' placeholder='Phone Number' />
+                    <p>Choose Gender: </p>
+                    <select onChange={handleFormInput} name="gender" id="gender" className='formInput w-fit px-3 mb-8 outline-0 border-0 py-2 rounded-md shadow-md bg-white cursor-pointer'>
+                      <option value="" hidden>Select Gender</option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                    </select>
 
-                    <select onChange={handleFormInput} name="lga" id="lga" className='formInput w-fit px-3 outline-0 border-0 py-2 rounded-md shadow-md bg-white cursor-pointer'>
+                    <select onChange={handleFormInput} name="lga" id="lga" className='formInput w-fit mb-4 px-3 outline-0 border-0 py-2 rounded-md shadow-md bg-white cursor-pointer'>
                       <option value="" hidden>Select LGA</option>
                       {allLga.map((data, dataIndex) => {
                         return (
@@ -542,12 +629,15 @@ const Agent = (props) => {
                     <label htmlFor="mName">Middle Name: </label>
                     <input onChange={handleFormInput} className='formInput bg-white outline-0 border-0 mb-8 shadow-md rounded-md px-3 py-2 w-fit' type="text" id='mName' placeholder='Middle Name' />
 
-                    <p>Choose Gender: </p>
-                    <select onChange={handleFormInput} name="gender" id="gender" className='formInput w-fit px-3 mb-8 outline-0 border-0 py-2 rounded-md shadow-md bg-white cursor-pointer'>
-                      <option value="" hidden>Select Gender</option>
-                      <option value="male">Male</option>
-                      <option value="female">Female</option>
-                    </select>
+                    {/* Poll unit number */}
+                    <label htmlFor="tel">Phone Number: </label>
+                    <section className='flex flex-row gap-2'>
+                      <input 
+                        onChange={handleFormInput}
+                        className='formInput bg-white outline-0 border-0 mb-8 shadow-md rounded-md px-3 py-2 w-fit'
+                        type="tel" id='tel' placeholder='Phone Number'
+                      />
+                    </section>
 
                     <select onChange={handleFormInput} name="ward" id="ward" className='formInput w-fit px-3 outline-0 border-0 py-2 rounded-md shadow-md bg-white cursor-pointer'>
                       <option value="" hidden>Select Ward</option>
@@ -600,6 +690,38 @@ const Agent = (props) => {
                         );
                       })}
                     </select>
+
+                    {/* Poll unit number */}
+                    {/* <label htmlFor="tel">Poll Unit Number: </label>
+                    <section className='flex flex-row gap-2'>
+                      <input 
+                        defaultValue={statePollVal.val1}
+                        readOnly
+                        className='formInput cursor-not-allowed bg-white outline-0 border-0 mb-8 shadow-md rounded-md pl-2 pr-0 px-1 py-2 w-12' 
+                        type="number" id='tel1' 
+                      />
+
+                      <input 
+                        defaultValue={statePollVal.val2}
+                        readOnly
+                        className='formInput cursor-not-allowed bg-white outline-0 border-0 mb-8 shadow-md rounded-md pl-2 pr-0 px-1 py-2 w-12' 
+                        type="number" id='tel2' 
+                      />
+
+                      <input 
+                        defaultValue={statePollVal.val3}
+                        readOnly
+                        className='formInput cursor-not-allowed bg-white outline-0 border-0 mb-8 shadow-md rounded-md pl-2 pr-0 px-1 py-2 w-12' 
+                        type="number" id='tel3' 
+                      />
+
+                      <input 
+                        defaultValue={statePollVal.val4}
+                        readOnly
+                        className='formInput cursor-not-allowed bg-white outline-0 border-0 mb-8 shadow-md rounded-md pl-2 pr-0 px-1 py-2 w-14' 
+                        type="number" id='tel4' 
+                      />
+                    </section> */}
                   </section>
                 </form>
               </div>

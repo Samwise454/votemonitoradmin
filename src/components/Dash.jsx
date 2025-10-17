@@ -214,8 +214,8 @@ const Dash = (props) => {
       let totalVotes = allResult.validVoter
       // console.log(totalVotes)
       //let's now calculate the height of each bar
-      let eachBar = Math.floor((partyPercent[i] / totalVotes) * 100).toFixed(0);//by how much each bar should grow
-      let barGrowth = Math.floor((partyPercent[i] / totalVotes) * tableHeight).toFixed(0);
+      let eachBar = ((partyPercent[i] / totalVotes) * 100).toFixed(1);//by how much each bar should grow
+      let barGrowth = Math.floor((partyPercent[i] / totalVotes) * tableHeight).toFixed(1);
       allChartData.push(eachBar);
      
       if (resultStat === false) {

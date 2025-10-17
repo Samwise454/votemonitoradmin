@@ -54,7 +54,35 @@ const Result = (props) => {
     const [pollAwr, setPollAwr] = useState([]);
     const awrState = useState(props.state);
 
+    const [wardRegVoter, setWardRegVoter] = useState([]);
+    const [wardAccredVoter, setWardAccredRegVoter] = useState([]);
+    const [wardTotalVoter, setWardTotalVoter] = useState([]);
+    const [wardInvalidVoter, setWardInvalidVoter] = useState([]);
+
+    const [wardParty, setWardParty] = useState([]);
+    // const [wardParty2, setWardParty2] = useState([]);
+    // const [wardParty3, setWardParty3] = useState([]);
+    // const [wardParty4, setWardParty4] = useState([]);
+    // const [wardParty5, setWardParty5] = useState([]);
+    // const [wardParty6, setWardParty6] = useState([]);
+
+    const [pollRegVoter, setPollRegVoter] = useState([]);
+    const [pollAccredVoter, setPollAccredRegVoter] = useState([]);
+    const [pollTotalVoter, setPollTotalVoter] = useState([]);
+    const [pollInvalidVoter, setPollInvalidVoter] = useState([]);
+
+    const [pollParty, setPollParty] = useState([]);
+    // const [pollParty2, setPollParty2] = useState([]);
+    // const [pollParty3, setPollParty3] = useState([]);
+    // const [pollParty4, setPollParty4] = useState([]);
+    // const [pollParty5, setPollParty5] = useState([]);
+    // const [pollParty6, setPollParty6] = useState([]);
+
     const [awrDataDash, setAwrDataDash] = useState(props.awrData);
+
+    const [winner, setWinner] = useState([]);//lga winner
+    const [winnerWard, setWinnerWard] = useState([]);//ward winner
+    const [winnerPoll, setWinnerPoll] = useState([]);//poll winner
 
     //fetch individual lga or state or ward results at first load
     useEffect(() => {
@@ -78,18 +106,105 @@ const Result = (props) => {
                         setLgaResult(response.data.lgaResult);
                         setAwr(response.data.awr)
                         lgaIsSet(true);
+
+                        let dataArray = [];
+                        for (let i = 0; i < response.data.lgaResult.length; i++) {
+                            let party1 = response.data.lgaResult[i]["party1"];
+                            let party2 = response.data.lgaResult[i]["party2"];
+                            let party3 = response.data.lgaResult[i]["party3"];
+                            let party4 = response.data.lgaResult[i]["party4"];
+                            let party5 = response.data.lgaResult[i]["party5"];
+                            let party6 = response.data.lgaResult[i]["party6"];
+
+                            let data = {
+                                party1: party1,
+                                party2: party2,
+                                party3: party3,
+                                party4: party4,
+                                party5: party5,
+                                party6: party6,
+                            }
+                            dataArray.push(data);
+                        }
+                        
+                        let winners = [];
+                        for (let i = 0; i < dataArray.length; i++) {
+                            let winnerVal = Object.values(dataArray[i]);
+                            let winner = Math.max(...winnerVal);
+                            winners.push(winner);
+                        }
+                        // console.log(winners);
+                        setWinner(winners);
                     }
                     else if (whichResult === "ward") {
                         // console.log(response.data);
                         setWardResult(response.data.wardResult);
                         setWardAwr(response.data.awr);
                         wardIsSet(true);
+
+                        let dataArray = [];
+                        for (let i = 0; i < response.data.wardResult.length; i++) {
+                            let party1 = response.data.wardResult[i]["party1"];
+                            let party2 = response.data.wardResult[i]["party2"];
+                            let party3 = response.data.wardResult[i]["party3"];
+                            let party4 = response.data.wardResult[i]["party4"];
+                            let party5 = response.data.wardResult[i]["party5"];
+                            let party6 = response.data.wardResult[i]["party6"];
+
+                            let data = {
+                                party1: party1,
+                                party2: party2,
+                                party3: party3,
+                                party4: party4,
+                                party5: party5,
+                                party6: party6,
+                            }
+                            dataArray.push(data);
+                        }
+                        
+                        let winners = [];
+                        for (let i = 0; i < dataArray.length; i++) {
+                            let winnerVal = Object.values(dataArray[i]);
+                            let winner = Math.max(...winnerVal);
+                            winners.push(winner);
+                        }
+                        // console.log(winners);
+                        setWinnerWard(winners);
                     }
                     else if (whichResult === "poll") {
                         // console.log(response.data);
                         setPollResult(response.data);
                         // setPollAwr(response.data.awr);
                         pollIsSet(true);
+
+                        let dataArray = [];
+                        for (let i = 0; i < response.data.length; i++) {
+                            let party1 = response.data[i]["party1"];
+                            let party2 = response.data[i]["party2"];
+                            let party3 = response.data[i]["party3"];
+                            let party4 = response.data[i]["party4"];
+                            let party5 = response.data[i]["party5"];
+                            let party6 = response.data[i]["party6"];
+
+                            let data = {
+                                party1: party1,
+                                party2: party2,
+                                party3: party3,
+                                party4: party4,
+                                party5: party5,
+                                party6: party6,
+                            }
+                            dataArray.push(data);
+                        }
+                        
+                        let winners = [];
+                        for (let i = 0; i < dataArray.length; i++) {
+                            let winnerVal = Object.values(dataArray[i]);
+                            let winner = Math.max(...winnerVal);
+                            winners.push(winner);
+                        }
+                        // console.log(winners);
+                        setWinnerPoll(winners);
                     }
                 }
                 else {
@@ -129,19 +244,139 @@ const Result = (props) => {
                         // console.log(response.data);
                         setLgaResult(response.data.lgaResult);
                         setAwr(response.data.awr)
-                        lgaIsSet(true);
+
+                        let dataArray = [];
+                        for (let i = 0; i < response.data.lgaResult.length; i++) {
+                            let party1 = response.data.lgaResult[i]["party1"];
+                            let party2 = response.data.lgaResult[i]["party2"];
+                            let party3 = response.data.lgaResult[i]["party3"];
+                            let party4 = response.data.lgaResult[i]["party4"];
+                            let party5 = response.data.lgaResult[i]["party5"];
+                            let party6 = response.data.lgaResult[i]["party6"];
+
+                            let data = {
+                                party1: party1,
+                                party2: party2,
+                                party3: party3,
+                                party4: party4,
+                                party5: party5,
+                                party6: party6,
+                            }
+                            dataArray.push(data);
+                        }
+                        
+                        let winners = [];
+                        for (let i = 0; i < dataArray.length; i++) {
+                            let winnerVal = Object.values(dataArray[i]);
+                            let winner = Math.max(...winnerVal);
+                            winners.push(winner);
+                        }
+                        // console.log(winners);
+                        setWinner(winners);
                     }
                     else if (whichResult === "ward") {
-                        // console.log(response.data);
+                        // console.log(response.data.awr);
                         setWardResult(response.data.wardResult);
                         setWardAwr(response.data.awr);
-                        wardIsSet(true);
+
+                        let dataArray = [];
+                        let regVoter = [];
+                        let accredVoter = [];
+                        let totalVote = [];
+                        let invalidVote = [];
+
+                        for (let i = 0; i < response.data.wardResult.length; i++) {
+                            let party1 = response.data.wardResult[i]["party1"];
+                            let party2 = response.data.wardResult[i]["party2"];
+                            let party3 = response.data.wardResult[i]["party3"];
+                            let party4 = response.data.wardResult[i]["party4"];
+                            let party5 = response.data.wardResult[i]["party5"];
+                            let party6 = response.data.wardResult[i]["party6"];
+                            let regV = response.data.wardResult[i]["regVoter"];
+                            let accV = response.data.wardResult[i]["accredVoter"];
+                            let totV = response.data.wardResult[i]["totalVote"];
+                            let inaV = response.data.wardResult[i]["invalidVote"];
+
+                            let data = {
+                                party1: party1,
+                                party2: party2,
+                                party3: party3,
+                                party4: party4,
+                                party5: party5,
+                                party6: party6,
+                            }
+                            dataArray.push(data);
+                            regVoter.push(regV);
+                            accredVoter.push(accV);
+                            totalVote.push(totV);
+                            invalidVote.push(inaV);
+                        }
+                        
+                        let winners = [];
+                        for (let i = 0; i < dataArray.length; i++) {
+                            let winnerVal = Object.values(dataArray[i]);
+                            let winner = Math.max(...winnerVal).toString();
+                            winners.push(winner);
+                        }
+                        // console.log(dataArray);
+                        setWardRegVoter(regVoter);
+                        setWardAccredRegVoter(accredVoter);
+                        setWardTotalVoter(totalVote);
+                        setWardInvalidVoter(invalidVote);
+                        setWinnerWard(winners);
+                        setWardParty(dataArray);
                     }
                     else if (whichResult === "poll") {
                         // console.log(response.data);
                         setPollResult(response.data);
                         // setPollAwr(response.data.awr);
-                        pollIsSet(true);
+
+                        let dataArray = [];
+                        let regVoter = [];
+                        let accredVoter = [];
+                        let totalVote = [];
+                        let invalidVote = [];
+
+                        for (let i = 0; i < response.data.length; i++) {
+                            let party1 = response.data[i]["party1"];
+                            let party2 = response.data[i]["party2"];
+                            let party3 = response.data[i]["party3"];
+                            let party4 = response.data[i]["party4"];
+                            let party5 = response.data[i]["party5"];
+                            let party6 = response.data[i]["party6"];
+                            let regV = response.data[i]["regVoter"];
+                            let accV = response.data[i]["accredVoter"];
+                            let totV = response.data[i]["totalVote"];
+                            let inaV = response.data[i]["invalidVote"];
+
+                            let data = {
+                                party1: party1,
+                                party2: party2,
+                                party3: party3,
+                                party4: party4,
+                                party5: party5,
+                                party6: party6,
+                            }
+                            dataArray.push(data);
+                            regVoter.push(regV);
+                            accredVoter.push(accV);
+                            totalVote.push(totV);
+                            invalidVote.push(inaV);
+                        }
+                        
+                        let winners = [];
+                        for (let i = 0; i < dataArray.length; i++) {
+                            let winnerVal = Object.values(dataArray[i]);
+                            let winner = Math.max(...winnerVal);
+                            winners.push(winner);
+                        }
+                        // console.log(dataArray);
+                        setPollRegVoter(regVoter);
+                        setPollAccredRegVoter(accredVoter);
+                        setPollTotalVoter(totalVote);
+                        setPollInvalidVoter(invalidVote);
+                        setPollParty(dataArray);
+                        setWinnerPoll(winners);
                     }
                 }
                 else {
@@ -155,7 +390,17 @@ const Result = (props) => {
                 setLgaResult([]);
                 setWardResult([]);
                 setPollResult([]);
-            } 
+            } finally {
+                if (whichResult === "lga") {
+                    lgaIsSet(true);
+                }
+                else if (whichResult === "ward") {
+                    wardIsSet(true);
+                }
+                else if (whichResult === "poll") {
+                    pollIsSet(true);
+                }
+            }
         }
         getRes();
     }
@@ -511,42 +756,42 @@ const Result = (props) => {
                                                         <div className="shadow-sm rounded-sm p-1">
                                                             <section className='text-sm text-nowrap bg-gray-100 p-1 flex flex-row'>
                                                                 <p className='partyText'>Registered Voters: </p>
-                                                                {isLgaSet == false ?
-                                                                    <p className='partyText font-bold w-full text-right ml-1 text-purple-700'>Nil</p>
-                                                                :
+                                                                {isLgaSet == true && lgaResult[dataIndex] ?
                                                                     <p className='partyText font-bold w-full text-right ml-1 text-purple-700'>{lgaResult[dataIndex]["regVoter"]}</p>
+                                                                :
+                                                                    <p className='partyText font-bold w-full text-right ml-1 text-purple-700'>0</p>
                                                                 }
                                                             </section>
                                                             <section className='text-sm text-nowrap bg-gray-100 p-1 flex flex-row'>
                                                                 <p className='partyText'>Accredited Voters: </p>
-                                                                {isLgaSet == false ?
-                                                                    <p className='partyText font-bold w-full text-right ml-1 text-green-700'>Nil</p>
-                                                                :
+                                                                {isLgaSet == true && lgaResult[dataIndex] ?
                                                                     <p className='partyText font-bold w-full text-right ml-1 text-green-700'>{lgaResult[dataIndex]["accredVoter"]}</p>
+                                                                :
+                                                                    <p className='partyText font-bold w-full text-right ml-1 text-green-700'>0</p>
                                                                 }
                                                             </section>
                                                             <section className='text-sm text-nowrap p-1 flex flex-row'>
                                                                 <p className='partyText'>Total Votes Cast: </p>
-                                                                {isLgaSet == false ?
-                                                                    <p className='partyText font-bold w-full text-right ml-1 text-blue-700'>Nil</p>
-                                                                :
+                                                                {isLgaSet == true && lgaResult[dataIndex] ?
                                                                     <p className='partyText font-bold w-full text-right ml-1 text-blue-700'>{lgaResult[dataIndex]["totalVote"]}</p>
+                                                                :
+                                                                    <p className='partyText font-bold w-full text-right ml-1 text-blue-700'>0</p>
                                                                 }
                                                             </section>
                                                             <section className='text-sm text-nowrap p-1 flex flex-row'>
                                                                 <p className='partyText'>Invalid Votes: </p>
-                                                                {isLgaSet == false ?
-                                                                    <p className='partyText font-bold w-full text-right ml-1 text-yellow-700'>Nil</p>
-                                                                :
+                                                                {isLgaSet == true && lgaResult[dataIndex] ?
                                                                     <p className='partyText font-bold w-full text-right ml-1 text-yellow-700'>{lgaResult[dataIndex]["invalidVote"]}</p>
+                                                                :
+                                                                    <p className='partyText font-bold w-full text-right ml-1 text-yellow-700'>0</p>
                                                                 }
                                                             </section>
                                                             <section className='text-sm text-nowrap bg-gray-100 p-1 flex flex-row'>
                                                                 <p className='partyText' onClick={showAwr} title='Click to View Awaiting Results'><span className='bg-red-700 text-white rounded-sm p-1 cursor-pointer'>AWR</span> </p>
-                                                                {isLgaSet == false ?
-                                                                    <p className='partyText font-bold w-full text-right ml-1'><span className='text-red-700'>Nil</span> / <span>0</span></p>
-                                                                :
+                                                                {isLgaSet == true && awr[dataIndex] ?
                                                                     <p className='partyText font-bold w-full text-right ml-1'><span className='text-red-700'>{awr[dataIndex]["awrNumer"]}</span> / <span>{awr[dataIndex]["awrDenom"]}</span></p>
+                                                                :
+                                                                    <p className='partyText font-bold w-full text-right ml-1'><span className='text-red-700'>0</span> / <span>0</span></p>
                                                                 }
                                                             </section>
                                                         </div>
@@ -559,13 +804,23 @@ const Result = (props) => {
                                                                         <p className='text-sm'><span className='bg-yellow-200 rounded-sm text-black px-2 py-1 font-semibold'>{acronym[0]}</span></p>
                                                                     </section>
                                                                     <section className='voteCount mt-3 shadow-md p-1 text-center'>
-                                                                        {isLgaSet == false ?
-                                                                            <p className='font-bold text-lg'>0</p>
-                                                                        :
+                                                                        {isLgaSet == true && lgaResult[dataIndex] ?
                                                                             <p className='font-bold text-lg'>{lgaResult[dataIndex]["party1"]}</p>
+                                                                        :
+                                                                            <p className='font-bold text-lg'>0</p>
                                                                         }
                                                                     </section>
                                                                 </div>
+
+                                                                {isLgaSet == true && lgaResult[dataIndex] ?
+                                                                    winner[dataIndex] !== 0 && winner[dataIndex] == lgaResult[dataIndex]["party1"] ?
+                                                                        <div className='absolute bottom-0 h-2 w-15 ml-3 mb-0 bg-pink-500 animate__animated animate__zoomIn rounded-full'></div>
+                                                                    :
+                                                                        <div className='absolute bottom-0 h-2 w-15 ml-3 mb-0 bg-pink-500 animate__animated animate__zoomOut rounded-full'></div>
+                                                                    
+                                                                :
+                                                                    <></>
+                                                                }
                                                             </div>
 
                                                             <div className={partyBg[acronym[1]]}>
@@ -575,13 +830,23 @@ const Result = (props) => {
                                                                         <p className='text-sm'><span className='bg-green-300 rounded-sm text-black px-2 py-1 font-semibold'>{acronym[1]}</span></p>
                                                                     </section>
                                                                     <section className='voteCount mt-3 shadow-md p-1 text-center'>
-                                                                        {isLgaSet == false ?
-                                                                            <p className='font-bold text-lg'>0</p>
-                                                                        :
+                                                                        {isLgaSet == true && lgaResult[dataIndex] ?
                                                                             <p className='font-bold text-lg'>{lgaResult[dataIndex]["party2"]}</p>
+                                                                        :
+                                                                            <p className='font-bold text-lg'>0</p>
                                                                         }
                                                                     </section>
                                                                 </div>
+
+                                                                {isLgaSet == true && lgaResult[dataIndex] ?
+                                                                    winner[dataIndex] !== 0 && winner[dataIndex] == lgaResult[dataIndex]["party2"] ?
+                                                                        <div className='absolute bottom-0 h-2 w-15 ml-3 mb-0 bg-pink-500 animate__animated animate__zoomIn rounded-full'></div>
+                                                                    :
+                                                                        <div className='absolute bottom-0 h-2 w-15 ml-3 mb-0 bg-pink-500 animate__animated animate__zoomOut rounded-full'></div>
+                                                                    
+                                                                :
+                                                                    <></>
+                                                                }
                                                             </div>
 
                                                             <div className={partyBg[acronym[2]]}>
@@ -591,13 +856,23 @@ const Result = (props) => {
                                                                         <p className='text-sm'><span className='bg-red-200 rounded-sm text-black px-2 py-1 font-semibold'>{acronym[2]}</span></p>
                                                                     </section>
                                                                     <section className='voteCount mt-3 shadow-md p-1 text-center'>
-                                                                        {isLgaSet == false ?
-                                                                            <p className='font-bold text-lg'>0</p>
-                                                                        :
+                                                                        {isLgaSet == true && lgaResult[dataIndex] ?
                                                                             <p className='font-bold text-lg'>{lgaResult[dataIndex]["party3"]}</p>
+                                                                        :   
+                                                                            <p className='font-bold text-lg'>0</p>
                                                                         }
                                                                     </section>
                                                                 </div>
+
+                                                                {isLgaSet == true && lgaResult[dataIndex] ?
+                                                                    winner[dataIndex] !== 0 && winner[dataIndex] == lgaResult[dataIndex]["party3"] ?
+                                                                        <div className='absolute bottom-0 h-2 w-15 ml-3 mb-0 bg-pink-500 animate__animated animate__zoomIn rounded-full'></div>
+                                                                    :
+                                                                        <div className='absolute bottom-0 h-2 w-15 ml-3 mb-0 bg-pink-500 animate__animated animate__zoomOut rounded-full'></div>
+                                                                    
+                                                                :
+                                                                    <></>
+                                                                }
                                                             </div>
 
                                                             <div className={partyBg[acronym[3]]}>
@@ -607,13 +882,23 @@ const Result = (props) => {
                                                                         <p className='text-sm'><span className='bg-blue-200 rounded-sm text-black px-2 py-1 font-semibold'>{acronym[3]}</span></p>
                                                                     </section>
                                                                     <section className='voteCount mt-3 shadow-md p-1 text-center'>
-                                                                        {isLgaSet == false ?
-                                                                            <p className='font-bold text-lg'>0</p>
-                                                                        :
+                                                                        {isLgaSet == true && lgaResult[dataIndex] ?
                                                                             <p className='font-bold text-lg'>{lgaResult[dataIndex]["party4"]}</p>
+                                                                        :
+                                                                            <p className='font-bold text-lg'>0</p>
                                                                         }
                                                                     </section>
                                                                 </div>
+
+                                                                {isLgaSet == true && lgaResult[dataIndex] ?
+                                                                    winner[dataIndex] !== 0 && winner[dataIndex] == lgaResult[dataIndex]["party4"] ?
+                                                                        <div className='absolute bottom-0 h-2 w-15 ml-3 mb-0 bg-pink-500 animate__animated animate__zoomIn rounded-full'></div>
+                                                                    :
+                                                                        <div className='absolute bottom-0 h-2 w-15 ml-3 mb-0 bg-pink-500 animate__animated animate__zoomOut rounded-full'></div>
+                                                                    
+                                                                :
+                                                                    <></>
+                                                                }
                                                             </div>
 
                                                             <div className={partyBg[acronym[4]]}>
@@ -623,13 +908,23 @@ const Result = (props) => {
                                                                         <p className='text-sm'><span className='bg-gray-200 rounded-sm text-black px-2 py-1 font-semibold'>{acronym[4]}</span></p>
                                                                     </section>
                                                                     <section className='voteCount mt-3 shadow-md p-1 text-center'>
-                                                                        {isLgaSet == false ?
-                                                                            <p className='font-bold text-lg'>0</p>
-                                                                        :
+                                                                        {isLgaSet == true && lgaResult[dataIndex] ?
                                                                             <p className='font-bold text-lg'>{lgaResult[dataIndex]["party5"]}</p>
+                                                                        :
+                                                                            <p className='font-bold text-lg'>0</p>   
                                                                         }
                                                                     </section>
                                                                 </div>
+
+                                                                {isLgaSet == true && lgaResult[dataIndex] ?
+                                                                    winner[dataIndex] !== 0 && winner[dataIndex] == lgaResult[dataIndex]["party5"] ?
+                                                                        <div className='absolute bottom-0 h-2 w-15 ml-3 mb-0 bg-pink-500 animate__animated animate__zoomIn rounded-full'></div>
+                                                                    :
+                                                                        <div className='absolute bottom-0 h-2 w-15 ml-3 mb-0 bg-pink-500 animate__animated animate__zoomOut rounded-full'></div>
+                                                                    
+                                                                :
+                                                                    <></>
+                                                                }
                                                             </div>
                                                             
                                                             <div className={partyBg[acronym[5]]}>
@@ -639,22 +934,32 @@ const Result = (props) => {
                                                                         <p className='text-sm'><span className='bg-purple-200 rounded-sm text-black px-2 py-1 font-semibold'>{acronym[5]}</span></p>
                                                                     </section>
                                                                     <section className='voteCount mt-3 shadow-md p-1 text-center'>
-                                                                        {isLgaSet == false ?
-                                                                            <p className='font-bold text-lg'>0</p>
-                                                                        :
+                                                                        {isLgaSet == true && lgaResult[dataIndex] ?
                                                                             <p className='font-bold text-lg'>{lgaResult[dataIndex]["party6"]}</p>
+                                                                        :
+                                                                            <p className='font-bold text-lg'>0</p>
                                                                         }
                                                                     </section>
                                                                 </div>
+
+                                                                {isLgaSet == true && lgaResult[dataIndex] ?
+                                                                    winner[dataIndex] !== 0 && winner[dataIndex] == lgaResult[dataIndex]["party6"] ?
+                                                                        <div className='absolute bottom-0 h-2 w-15 ml-3 mb-0 bg-pink-500 animate__animated animate__zoomIn rounded-full'></div>
+                                                                    :
+                                                                        <div className='absolute bottom-0 h-2 w-15 ml-3 mb-0 bg-pink-500 animate__animated animate__zoomOut rounded-full'></div>
+                                                                    
+                                                                :
+                                                                    <></>
+                                                                }
                                                             </div>
 
-                                                            {isLgaSet == false ?
-                                                                <></>
-                                                            :
+                                                            {isLgaSet == true && lgaResult[dataIndex] ?
                                                                 lgaResult[dataIndex]["overVote"] == 0 ?
                                                                     <></>
                                                                 :
                                                                     <p className='absolute top-0 h-2 w-40 bg-red-600 ml-70 -mt-2 rounded-tr-full rounded-tl-full animate__animated animate__zoomIn'></p>
+                                                            :
+                                                                <></>      
                                                             }
                                                         </div>
                                                     </section>
@@ -682,42 +987,44 @@ const Result = (props) => {
                                                             <div className="shadow-sm rounded-sm p-1">
                                                                 <section className='text-sm text-nowrap bg-gray-100 p-1 flex flex-row'>
                                                                     <p className='partyText'>Registered Voters: </p>
-                                                                    {isWardSet == false ?
-                                                                        <p className='partyText font-bold w-full text-right ml-1 text-purple-700'>Nil</p>
+                                                                    {isWardSet == true && wardRegVoter[dataIndex] ?
+                                                                        <p className='partyText font-bold w-full text-right ml-1 text-purple-700'>{wardRegVoter[dataIndex]}</p>
                                                                     :
-                                                                        <p className='partyText font-bold w-full text-right ml-1 text-purple-700'>{wardResult[dataIndex]["regVoter"]}</p>
+                                                                        <p className='partyText font-bold w-full text-right ml-1 text-purple-700'>0</p>
                                                                     }
                                                                 </section>
                                                                 <section className='text-sm text-nowrap bg-gray-100 p-1 flex flex-row'>
                                                                     <p className='partyText'>Accredited Voters: </p>
-                                                                    {isWardSet == false ?
-                                                                        <p className='partyText font-bold w-full text-right ml-1 text-green-700'>Nil</p>
+                                                                    {isWardSet == true && wardAccredVoter[dataIndex] ?
+                                                                        <p className='partyText font-bold w-full text-right ml-1 text-green-700'>{wardAccredVoter[dataIndex]}</p>
+                                                                        // <p className='partyText font-bold w-full text-right ml-1 text-green-700'>{wardResult[dataIndex]["accredVoter"]}</p>
                                                                     :
-                                                                        <p className='partyText font-bold w-full text-right ml-1 text-green-700'>{wardResult[dataIndex]["accredVoter"]}</p>
+                                                                        <p className='partyText font-bold w-full text-right ml-1 text-green-700'>0</p>
                                                                     }
                                                                 </section>
                                                                 <section className='text-sm text-nowrap p-1 flex flex-row'>
                                                                     <p className='partyText'>Total Votes Cast: </p>
-                                                                    {isWardSet == false ?
-                                                                        <p className='partyText font-bold w-full text-right ml-1 text-blue-700'>Nil</p>
+                                                                    {isWardSet == true && wardTotalVoter[dataIndex] ?
+                                                                        <p className='partyText font-bold w-full text-right ml-1 text-blue-700'>{wardTotalVoter[dataIndex]}</p>
+                                                                        // <p className='partyText font-bold w-full text-right ml-1 text-blue-700'>{wardResult[dataIndex]["totalVote"]}</p>
                                                                     :
-                                                                        <p className='partyText font-bold w-full text-right ml-1 text-blue-700'>{wardResult[dataIndex]["totalVote"]}</p>
+                                                                        <p className='partyText font-bold w-full text-right ml-1 text-blue-700'>0</p>
                                                                     }
                                                                 </section>
                                                                 <section className='text-sm text-nowrap p-1 flex flex-row'>
                                                                     <p className='partyText'>Invalid Votes: </p>
-                                                                    {isWardSet == false ?
-                                                                        <p className='partyText font-bold w-full text-right ml-1 text-yellow-700'>Nil</p>
+                                                                    {isWardSet == true && wardInvalidVoter[dataIndex] ?
+                                                                        <p className='partyText font-bold w-full text-right ml-1 text-yellow-700'>{wardInvalidVoter[dataIndex]}</p>
                                                                     :
-                                                                        <p className='partyText font-bold w-full text-right ml-1 text-yellow-700'>{wardResult[dataIndex]["invalidVote"]}</p>
+                                                                        <p className='partyText font-bold w-full text-right ml-1 text-yellow-700'>0</p>
                                                                     }
                                                                 </section>
                                                                 <section className='text-sm text-nowrap bg-gray-100 p-1 flex flex-row'>
                                                                     <p className='partyText' onClick={showAwr} title='Click to View Awaiting Results'><span className='bg-red-700 text-white rounded-sm p-1 cursor-pointer'>AWR</span> </p>
-                                                                    {isWardSet == false ?
-                                                                        <p className='partyText font-bold w-full text-right ml-1'><span className='text-red-700'>Nil</span> / <span>0</span></p>
-                                                                    :
+                                                                    {isWardSet == true && wardAwr[dataIndex] ?
                                                                         <p className='partyText font-bold w-full text-right ml-1'><span className='text-red-700'>{wardAwr[dataIndex]["awrNumer"]}</span> / <span>{wardAwr[dataIndex]["awrDenom"]}</span></p>
+                                                                    :
+                                                                        <p className='font-bold text-lg'>0/0</p>
                                                                     }
                                                                 </section>
                                                             </div>
@@ -730,13 +1037,24 @@ const Result = (props) => {
                                                                             <p className='text-sm'><span className='bg-yellow-200 rounded-sm text-black px-2 py-1 font-semibold'>{acronym[0]}</span></p>
                                                                         </section>
                                                                         <section className='voteCount mt-3 shadow-md p-1 text-center'>
-                                                                            {isWardSet == false ?
-                                                                                <p className='font-bold text-lg'>0</p>
+                                                                            {isWardSet == true && wardParty[dataIndex] ?
+                                                                                // <p className='font-bold text-lg'>{wardResult[dataIndex]["party1"]}</p>
+                                                                                <p className='font-bold text-lg'>{wardParty[dataIndex]["party1"]}</p>
                                                                             :
-                                                                                <p className='font-bold text-lg'>{wardResult[dataIndex]["party1"]}</p>
+                                                                                <p className='font-bold text-lg'>0</p>
                                                                             }
                                                                         </section>
                                                                     </div>
+
+                                                                    {isWardSet == true && wardParty[dataIndex] ?
+                                                                        winnerWard[dataIndex] !== 0 && winnerWard[dataIndex] == wardParty[dataIndex]["party1"] ?
+                                                                            <div className='absolute bottom-0 h-2 w-15 ml-3 mb-0 bg-pink-500 animate__animated animate__zoomIn rounded-full'></div>
+                                                                        :
+                                                                            <div className='absolute bottom-0 h-2 w-15 ml-3 mb-0 bg-pink-500 animate__animated animate__zoomOut rounded-full'></div>
+                                                                        
+                                                                    :
+                                                                        <></>
+                                                                    }
                                                                 </div>
 
                                                                 <div className={partyBg[acronym[1]]}>
@@ -746,13 +1064,23 @@ const Result = (props) => {
                                                                             <p className='text-sm'><span className='bg-green-300 rounded-sm text-black px-2 py-1 font-semibold'>{acronym[1]}</span></p>
                                                                         </section>
                                                                         <section className='voteCount mt-3 shadow-md p-1 text-center'>
-                                                                            {isWardSet == false ?
-                                                                                <p className='font-bold text-lg'>0</p>
+                                                                            {isWardSet == true && wardParty[dataIndex] ?
+                                                                                <p className='font-bold text-lg'>{wardParty[dataIndex]["party2"]}</p>
                                                                             :
-                                                                                <p className='font-bold text-lg'>{wardResult[dataIndex]["party2"]}</p>
+                                                                                <p className='font-bold text-lg'>0</p>
                                                                             }
                                                                         </section>
                                                                     </div>
+
+                                                                    {isWardSet == true && wardParty[dataIndex] ?
+                                                                        winnerWard[dataIndex] !== 0 && winnerWard[dataIndex] == wardParty[dataIndex]["party2"] ?
+                                                                            <div className='absolute bottom-0 h-2 w-15 ml-3 mb-0 bg-pink-500 animate__animated animate__zoomIn rounded-full'></div>
+                                                                        :
+                                                                            <div className='absolute bottom-0 h-2 w-15 ml-3 mb-0 bg-pink-500 animate__animated animate__zoomOut rounded-full'></div>
+                                                                        
+                                                                    :
+                                                                        <></>
+                                                                    }
                                                                 </div>
 
                                                                 <div className={partyBg[acronym[2]]}>
@@ -762,13 +1090,23 @@ const Result = (props) => {
                                                                             <p className='text-sm'><span className='bg-red-200 rounded-sm text-black px-2 py-1 font-semibold'>{acronym[2]}</span></p>
                                                                         </section>
                                                                         <section className='voteCount mt-3 shadow-md p-1 text-center'>
-                                                                            {isWardSet == false ?
-                                                                                <p className='font-bold text-lg'>0</p>
+                                                                            {isWardSet == true && wardParty[dataIndex] ?
+                                                                                <p className='font-bold text-lg'>{wardParty[dataIndex]["party3"]}</p>
                                                                             :
-                                                                                <p className='font-bold text-lg'>{wardResult[dataIndex]["party3"]}</p>
-                                                                            }
+                                                                                <p className='font-bold text-lg'>0</p>
+                                                                            }   
                                                                         </section>
                                                                     </div>
+
+                                                                    {isWardSet == true && wardParty[dataIndex] ?
+                                                                        winnerWard[dataIndex] !== 0 && winnerWard[dataIndex] == wardParty[dataIndex]["party3"] ?
+                                                                            <div className='absolute bottom-0 h-2 w-15 ml-3 mb-0 bg-pink-500 animate__animated animate__zoomIn rounded-full'></div>
+                                                                        :
+                                                                            <div className='absolute bottom-0 h-2 w-15 ml-3 mb-0 bg-pink-500 animate__animated animate__zoomOut rounded-full'></div>
+                                                                        
+                                                                    :
+                                                                        <></>
+                                                                    }
                                                                 </div>
 
                                                                 <div className={partyBg[acronym[3]]}>
@@ -778,13 +1116,23 @@ const Result = (props) => {
                                                                             <p className='text-sm'><span className='bg-blue-200 rounded-sm text-black px-2 py-1 font-semibold'>{acronym[3]}</span></p>
                                                                         </section>
                                                                         <section className='voteCount mt-3 shadow-md p-1 text-center'>
-                                                                            {isWardSet == false ?
-                                                                                <p className='font-bold text-lg'>0</p>
+                                                                            {isWardSet == true && wardParty[dataIndex] ?
+                                                                                <p className='font-bold text-lg'>{wardParty[dataIndex]["party4"]}</p>
                                                                             :
-                                                                                <p className='font-bold text-lg'>{wardResult[dataIndex]["party4"]}</p>
+                                                                                <p className='font-bold text-lg'>0</p>
                                                                             }
                                                                         </section>
                                                                     </div>
+
+                                                                    {isWardSet == true && wardParty[dataIndex] ?
+                                                                        winnerWard[dataIndex] !== 0 && winnerWard[dataIndex] == wardParty[dataIndex]["party4"] ?
+                                                                            <div className='absolute bottom-0 h-2 w-15 ml-3 mb-0 bg-pink-500 animate__animated animate__zoomIn rounded-full'></div>
+                                                                        :
+                                                                            <div className='absolute bottom-0 h-2 w-15 ml-3 mb-0 bg-pink-500 animate__animated animate__zoomOut rounded-full'></div>
+                                                                        
+                                                                    :
+                                                                        <></>
+                                                                    }
                                                                 </div>
 
                                                                 <div className={partyBg[acronym[4]]}>
@@ -794,13 +1142,23 @@ const Result = (props) => {
                                                                             <p className='text-sm'><span className='bg-gray-200 rounded-sm text-black px-2 py-1 font-semibold'>{acronym[4]}</span></p>
                                                                         </section>
                                                                         <section className='voteCount mt-3 shadow-md p-1 text-center'>
-                                                                            {isWardSet == false ?
-                                                                                <p className='font-bold text-lg'>0</p>
+                                                                            {isWardSet == true && wardParty[dataIndex] ?
+                                                                                <p className='font-bold text-lg'>{wardParty[dataIndex]["party5"]}</p>
                                                                             :
-                                                                                <p className='font-bold text-lg'>{wardResult[dataIndex]["party5"]}</p>
+                                                                                <p className='font-bold text-lg'>0</p>
                                                                             }
                                                                         </section>
                                                                     </div>
+
+                                                                    {isWardSet == true && wardParty[dataIndex] ?
+                                                                        winnerWard[dataIndex] !== 0 && winnerWard[dataIndex] == wardParty[dataIndex]["party5"] ?
+                                                                            <div className='absolute bottom-0 h-2 w-15 ml-3 mb-0 bg-pink-500 animate__animated animate__zoomIn rounded-full'></div>
+                                                                        :
+                                                                            <div className='absolute bottom-0 h-2 w-15 ml-3 mb-0 bg-pink-500 animate__animated animate__zoomOut rounded-full'></div>
+                                                                        
+                                                                    :
+                                                                        <></>
+                                                                    }
                                                                 </div>
                                                                 
                                                                 <div className={partyBg[acronym[5]]}>
@@ -810,22 +1168,32 @@ const Result = (props) => {
                                                                             <p className='text-sm'><span className='bg-purple-200 rounded-sm text-black px-2 py-1 font-semibold'>{acronym[5]}</span></p>
                                                                         </section>
                                                                         <section className='voteCount mt-3 shadow-md p-1 text-center'>
-                                                                            {isWardSet == false ?
-                                                                                <p className='font-bold text-lg'>0</p>
+                                                                            {isWardSet == true && wardParty[dataIndex] ?
+                                                                                <p className='font-bold text-lg'>{wardParty[dataIndex]["party6"]}</p>
                                                                             :
-                                                                                <p className='font-bold text-lg'>{wardResult[dataIndex]["party6"]}</p>
+                                                                                <p className='font-bold text-lg'>0</p>
                                                                             }
                                                                         </section>
                                                                     </div>
+
+                                                                    {isWardSet == true && wardParty[dataIndex] ?
+                                                                        winnerWard[dataIndex] !== 0 && winnerWard[dataIndex] == wardParty[dataIndex]["party6"] ?
+                                                                            <div className='absolute bottom-0 h-2 w-15 ml-3 mb-0 bg-pink-500 animate__animated animate__zoomIn rounded-full'></div>
+                                                                        :
+                                                                            <div className='absolute bottom-0 h-2 w-15 ml-3 mb-0 bg-pink-500 animate__animated animate__zoomOut rounded-full'></div>
+                                                                        
+                                                                    :
+                                                                        <></>
+                                                                    }
                                                                 </div>
 
-                                                                {isWardSet == false ?
-                                                                    <></>
-                                                                :
+                                                                {isWardSet == true && wardResult[dataIndex] ?
                                                                     wardResult[dataIndex]["overVote"] == 0 ?
                                                                         <></>
                                                                     :
                                                                         <p className='absolute top-0 h-2 w-40 bg-red-600 ml-70 -mt-2 rounded-tr-full rounded-tl-full animate__animated animate__zoomIn'></p>
+                                                                :
+                                                                    <></>
                                                                 }
                                                             </div>
                                                         </section>
@@ -851,44 +1219,44 @@ const Result = (props) => {
                                                                 <div className="shadow-sm rounded-sm p-1">
                                                                     <section className='text-sm text-nowrap bg-gray-100 p-1 flex flex-row'>
                                                                         <p className='partyText'>Registered Voters: </p>
-                                                                        {isPollSet == false ?
-                                                                            <p className='partyText font-bold w-full text-right ml-1 text-purple-700'>Nil</p>
+                                                                        {isPollSet == true && pollRegVoter[dataIndex] ?
+                                                                            <p className='partyText font-bold w-full text-right ml-1 text-purple-700'>{pollRegVoter[dataIndex]}</p>
                                                                         :
-                                                                            <p className='partyText font-bold w-full text-right ml-1 text-purple-700'>{pollResult[dataIndex]["regVoter"]}</p>
+                                                                            <p className='partyText font-bold w-full text-right ml-1 text-purple-700'>0</p>
                                                                         }
                                                                     </section>
                                                                     <section className='text-sm text-nowrap bg-gray-100 p-1 flex flex-row'>
                                                                         <p className='partyText'>Accredited Voters: </p>
-                                                                        {isPollSet == false ?
-                                                                            <p className='partyText font-bold w-full text-right ml-1 text-green-700'>Nil</p>
+                                                                        {isPollSet == true && pollAccredVoter[dataIndex] ?
+                                                                            <p className='partyText font-bold w-full text-right ml-1 text-green-700'>{pollAccredVoter[dataIndex]}</p>
                                                                         :
-                                                                            <p className='partyText font-bold w-full text-right ml-1 text-green-700'>{pollResult[dataIndex]["accredVoter"]}</p>
+                                                                            <p className='partyText font-bold w-full text-right ml-1 text-green-700'>0</p>   
                                                                         }
                                                                     </section>
                                                                     <section className='text-sm text-nowrap p-1 flex flex-row'>
                                                                         <p className='partyText'>Total Votes Cast: </p>
-                                                                        {isPollSet == false ?
-                                                                            <p className='partyText font-bold w-full text-right ml-1 text-blue-700'>Nil</p>
+                                                                        {isPollSet == true && pollTotalVoter[dataIndex] ?
+                                                                            <p className='partyText font-bold w-full text-right ml-1 text-blue-700'>{pollTotalVoter[dataIndex]}</p>
                                                                         :
-                                                                            <p className='partyText font-bold w-full text-right ml-1 text-blue-700'>{pollResult[dataIndex]["totalVote"]}</p>
+                                                                            <p className='partyText font-bold w-full text-right ml-1 text-blue-700'>0</p>   
                                                                         }
                                                                     </section>
                                                                     <section className='text-sm text-nowrap p-1 flex flex-row'>
                                                                         <p className='partyText'>Invalid Votes: </p>
-                                                                        {isPollSet == false ?
-                                                                            <p className='partyText font-bold w-full text-right ml-1 text-yellow-700'>Nil</p>
+                                                                        {isPollSet == true && pollInvalidVoter[dataIndex] ?
+                                                                            <p className='partyText font-bold w-full text-right ml-1 text-yellow-700'>{pollInvalidVoter[dataIndex]}</p>
                                                                         :
-                                                                            <p className='partyText font-bold w-full text-right ml-1 text-yellow-700'>{pollResult[dataIndex]["invalidVote"]}</p>
+                                                                            <p className='partyText font-bold w-full text-right ml-1 text-yellow-700'>0</p>
                                                                         }
                                                                     </section>
-                                                                    <section className='text-sm text-nowrap bg-gray-100 p-1 flex flex-row'>
+                                                                    {/* <section className='text-sm text-nowrap bg-gray-100 p-1 flex flex-row'>
                                                                         <p className='partyText' onClick={showAwr} title='Click to View Awaiting Results'><span className='bg-red-700 text-white rounded-sm p-1 cursor-pointer'>AWR</span> </p>
                                                                         {isPollSet == false ?
                                                                             <p className='partyText font-bold w-full text-right ml-1'><span className='text-red-700'>Nil</span> / <span>0</span></p>
                                                                         :
                                                                             <p className='partyText font-bold w-full text-right ml-1'><span className='text-red-700'>{wardAwr[dataIndex]["awrNumer"]}</span> / <span>{wardAwr[dataIndex]["awrDenom"]}</span></p>
                                                                         }
-                                                                    </section>
+                                                                    </section> */}
                                                                 </div>
 
                                                                 <div className='flex flex-row bg-gray-200 shadow-md rounded-sm py-2 items-center jusify-items-center relative'>
@@ -899,13 +1267,23 @@ const Result = (props) => {
                                                                                 <p className='text-sm'><span className='bg-yellow-200 rounded-sm text-black px-2 py-1 font-semibold'>{acronym[0]}</span></p>
                                                                             </section>
                                                                             <section className='voteCount mt-3 shadow-md p-1 text-center'>
-                                                                                {isPollSet == false ?
-                                                                                    <p className='font-bold text-lg'>0</p>
+                                                                                {isPollSet === true && pollParty[dataIndex] ?
+                                                                                    <p className='font-bold text-lg'>{pollParty[dataIndex]["party1"]}</p>
                                                                                 :
-                                                                                    <p className='font-bold text-lg'>{pollResult[dataIndex]["party1"]}</p>
+                                                                                    <p className='font-bold text-lg'>0</p>
                                                                                 }
                                                                             </section>
                                                                         </div>
+
+                                                                        {isPollSet == true && pollParty[dataIndex] ?
+                                                                            winnerPoll[dataIndex] !== 0 && winnerPoll[dataIndex] == pollParty[dataIndex]["party1"] ?
+                                                                                <div className='absolute bottom-0 h-2 w-15 ml-3 mb-0 bg-pink-500 animate__animated animate__zoomIn rounded-full'></div>
+                                                                            :
+                                                                                <div className='absolute bottom-0 h-2 w-15 ml-3 mb-0 bg-pink-500 animate__animated animate__zoomOut rounded-full'></div>
+                                                                            
+                                                                        :
+                                                                            <></>
+                                                                        }
                                                                     </div>
 
                                                                     <div className={partyBg[acronym[1]]}>
@@ -915,13 +1293,23 @@ const Result = (props) => {
                                                                                 <p className='text-sm'><span className='bg-green-300 rounded-sm text-black px-2 py-1 font-semibold'>{acronym[1]}</span></p>
                                                                             </section>
                                                                             <section className='voteCount mt-3 shadow-md p-1 text-center'>
-                                                                                {isPollSet == false ?
-                                                                                    <p className='font-bold text-lg'>0</p>
+                                                                                {isPollSet == true && pollParty[dataIndex] ?
+                                                                                    <p className='font-bold text-lg'>{pollParty[dataIndex]["party2"]}</p>
                                                                                 :
-                                                                                    <p className='font-bold text-lg'>{pollResult[dataIndex]["party2"]}</p>
+                                                                                    <p className='font-bold text-lg'>0</p>
                                                                                 }
                                                                             </section>
                                                                         </div>
+
+                                                                        {isPollSet == true && pollParty[dataIndex] ?
+                                                                            winnerPoll[dataIndex] !== 0 && winnerPoll[dataIndex] == pollParty[dataIndex]["party2"] ?
+                                                                                <div className='absolute bottom-0 h-2 w-15 ml-3 mb-0 bg-pink-500 animate__animated animate__zoomIn rounded-full'></div>
+                                                                            :
+                                                                                <div className='absolute bottom-0 h-2 w-15 ml-3 mb-0 bg-pink-500 animate__animated animate__zoomOut rounded-full'></div>
+                                                                            
+                                                                        :
+                                                                            <></>
+                                                                        }
                                                                     </div>
 
                                                                     <div className={partyBg[acronym[2]]}>
@@ -931,13 +1319,23 @@ const Result = (props) => {
                                                                                 <p className='text-sm'><span className='bg-red-200 rounded-sm text-black px-2 py-1 font-semibold'>{acronym[2]}</span></p>
                                                                             </section>
                                                                             <section className='voteCount mt-3 shadow-md p-1 text-center'>
-                                                                                {isPollSet == false ?
-                                                                                    <p className='font-bold text-lg'>0</p>
+                                                                                {isPollSet == true && pollParty[dataIndex] ?
+                                                                                    <p className='font-bold text-lg'>{pollParty[dataIndex]["party3"]}</p>
                                                                                 :
-                                                                                    <p className='font-bold text-lg'>{pollResult[dataIndex]["party3"]}</p>
+                                                                                    <p className='font-bold text-lg'>0</p>
                                                                                 }
                                                                             </section>
                                                                         </div>
+
+                                                                        {isPollSet == true && pollParty[dataIndex] ?
+                                                                            winnerPoll[dataIndex] !== 0 && winnerPoll[dataIndex] == pollParty[dataIndex]["party3"] ?
+                                                                                <div className='absolute bottom-0 h-2 w-15 ml-3 mb-0 bg-pink-500 animate__animated animate__zoomIn rounded-full'></div>
+                                                                            :
+                                                                                <div className='absolute bottom-0 h-2 w-15 ml-3 mb-0 bg-pink-500 animate__animated animate__zoomOut rounded-full'></div>
+                                                                            
+                                                                        :
+                                                                            <></>
+                                                                        }
                                                                     </div>
 
                                                                     <div className={partyBg[acronym[3]]}>
@@ -947,13 +1345,23 @@ const Result = (props) => {
                                                                                 <p className='text-sm'><span className='bg-blue-200 rounded-sm text-black px-2 py-1 font-semibold'>{acronym[3]}</span></p>
                                                                             </section>
                                                                             <section className='voteCount mt-3 shadow-md p-1 text-center'>
-                                                                                {isPollSet == false ?
-                                                                                    <p className='font-bold text-lg'>0</p>
+                                                                                {isPollSet == true && pollParty[dataIndex] ?
+                                                                                    <p className='font-bold text-lg'>{pollParty[dataIndex]["party4"]}</p>
                                                                                 :
-                                                                                    <p className='font-bold text-lg'>{pollResult[dataIndex]["party4"]}</p>
+                                                                                    <p className='font-bold text-lg'>0</p>
                                                                                 }
                                                                             </section>
                                                                         </div>
+
+                                                                        {isPollSet == true && pollParty[dataIndex] ?
+                                                                            winnerPoll[dataIndex] !== 0 && winnerPoll[dataIndex] == pollParty[dataIndex]["party4"] ?
+                                                                                <div className='absolute bottom-0 h-2 w-15 ml-3 mb-0 bg-pink-500 animate__animated animate__zoomIn rounded-full'></div>
+                                                                            :
+                                                                                <div className='absolute bottom-0 h-2 w-15 ml-3 mb-0 bg-pink-500 animate__animated animate__zoomOut rounded-full'></div>
+                                                                            
+                                                                        :
+                                                                            <></>
+                                                                        }
                                                                     </div>
 
                                                                     <div className={partyBg[acronym[4]]}>
@@ -963,13 +1371,23 @@ const Result = (props) => {
                                                                                 <p className='text-sm'><span className='bg-gray-200 rounded-sm text-black px-2 py-1 font-semibold'>{acronym[4]}</span></p>
                                                                             </section>
                                                                             <section className='voteCount mt-3 shadow-md p-1 text-center'>
-                                                                                {isPollSet == false ?
-                                                                                    <p className='font-bold text-lg'>0</p>
+                                                                                {isPollSet == true && pollParty[dataIndex] ?
+                                                                                    <p className='font-bold text-lg'>{pollParty[dataIndex]["party5"]}</p>
                                                                                 :
-                                                                                    <p className='font-bold text-lg'>{pollResult[dataIndex]["party5"]}</p>
+                                                                                    <p className='font-bold text-lg'>0</p>
                                                                                 }
                                                                             </section>
                                                                         </div>
+
+                                                                        {isPollSet == true && pollParty[dataIndex] ?
+                                                                            winnerPoll[dataIndex] !== 0 && winnerPoll[dataIndex] == pollParty[dataIndex]["party5"] ?
+                                                                                <div className='absolute bottom-0 h-2 w-15 ml-3 mb-0 bg-pink-500 animate__animated animate__zoomIn rounded-full'></div>
+                                                                            :
+                                                                                <div className='absolute bottom-0 h-2 w-15 ml-3 mb-0 bg-pink-500 animate__animated animate__zoomOut rounded-full'></div>
+                                                                            
+                                                                        :
+                                                                            <></>
+                                                                        }
                                                                     </div>
                                                                     
                                                                     <div className={partyBg[acronym[5]]}>
@@ -979,22 +1397,32 @@ const Result = (props) => {
                                                                                 <p className='text-sm'><span className='bg-purple-200 rounded-sm text-black px-2 py-1 font-semibold'>{acronym[5]}</span></p>
                                                                             </section>
                                                                             <section className='voteCount mt-3 shadow-md p-1 text-center'>
-                                                                                {isPollSet == false ?
-                                                                                    <p className='font-bold text-lg'>0</p>
+                                                                                {isPollSet == true && pollParty[dataIndex] ?
+                                                                                    <p className='font-bold text-lg'>{pollParty[dataIndex]["party6"]}</p>
                                                                                 :
-                                                                                    <p className='font-bold text-lg'>{pollResult[dataIndex]["party6"]}</p>
+                                                                                    <p className='font-bold text-lg'>0</p>
                                                                                 }
                                                                             </section>
                                                                         </div>
+                                                                        
+                                                                        {isPollSet == true && pollParty[dataIndex] ?
+                                                                            winnerPoll[dataIndex] !== 0 && winnerPoll[dataIndex] == pollParty[dataIndex]["party6"] ?
+                                                                                <div className='absolute bottom-0 h-2 w-15 ml-3 mb-0 bg-pink-500 animate__animated animate__zoomIn rounded-full'></div>
+                                                                            :
+                                                                                <div className='absolute bottom-0 h-2 w-15 ml-3 mb-0 bg-pink-500 animate__animated animate__zoomOut rounded-full'></div>
+                                                                            
+                                                                        :
+                                                                            <></>
+                                                                        }
                                                                     </div>
 
-                                                                    {isPollSet == false ?
-                                                                        <></>
-                                                                    :
+                                                                    {isPollSet == true && pollParty[dataIndex] ?
                                                                         pollResult[dataIndex]["overVote"] == 0 ?
                                                                             <></>
                                                                         :
                                                                             <p className='absolute top-0 h-2 w-40 bg-red-600 ml-70 -mt-2 rounded-tr-full rounded-tl-full animate__animated animate__zoomIn'></p>
+                                                                    :
+                                                                        <></>
                                                                     }
                                                                 </div>
                                                             </section>

@@ -279,16 +279,16 @@ const Awr = (props) => {
                     <table className='w-full overflow-y-auto'>
                         <thead>
                             <tr>
-                                <th className='text-blue-600 border-1 border-gray-200'>S/N0</th>
+                                {/* <th className='text-blue-600 border-1 border-gray-200'>S/N0</th> */}
                                 <th className='text-blue-600 border-1 border-gray-200'>Poll Unit</th>
-                                <th className='text-blue-600 border-1 border-gray-200'>Num</th>
+                                <th className='text-blue-600 border-1 border-gray-200'>Poll Num</th>
                             </tr>
                         </thead>
                         <tbody>
                             {allPoll.map((data, dataIndex) => {
                                 return (
                                     <tr className='text-center' key={dataIndex}>
-                                        <td className='px-2 py-2 text-black bg-white border-1 border-gray-200 text-left'>{dataIndex + 1}</td>                                        
+                                        {/* <td className='px-2 py-2 text-black bg-white border-1 border-gray-200 text-left'>{dataIndex + 1}</td>                                         */}
                                         <td title='Click to select' className='px-2 py-2 text-black cursor-pointer bg-white border-1 text-[13px] border-gray-200 text-left'>{data.poll}</td>
                                         <td className='px-2 py-2 text-black bg-white border-1 border-gray-200 text-left'>{data.num}</td>                                        
                                     </tr>

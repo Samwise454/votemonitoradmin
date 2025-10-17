@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleLeft, faAngleRight, faChartLine, faCheckToSlot, faCircleUser, faGaugeSimple, faGear, faHandshake, faPersonBooth, faSquarePollVertical, faUsers, faUserTie } from '@fortawesome/free-solid-svg-icons';
+import { faAngleLeft, faAngleRight, faChartLine, faChartPie, faCheckToSlot, faCircleUser, faGaugeSimple, faGear, faHandshake, faPersonBooth, faSquarePollVertical, faUsers, faUserTie } from '@fortawesome/free-solid-svg-icons';
 import Nav from "./Nav";
 import Dash from "./Dash";
 import Party from './Party';
@@ -10,6 +10,7 @@ import Result from './Result';
 import Agent from './Agent';
 import Password from './Password';
 import Ward from './Ward';
+import Stats from './Stats';
 import '../css/dashboard.css';  
 import 'animate.css';
 import axios from 'axios';
@@ -140,10 +141,10 @@ const Dashboard = () => {
                     Manage Parties
                 </p>
 
-                {/* <p id='d5' className='dashMenu'onClick={toggleDashboard}>
-                    <FontAwesomeIcon icon={faHandshake} className='mr-3'/>
-                    Results
-                </p> */}
+                <p id='d5' className='dashMenu'onClick={toggleDashboard}>
+                    <FontAwesomeIcon icon={faChartPie} className='mr-3'/>
+                    Statistics
+                </p>
 
             </section>
 
@@ -169,7 +170,7 @@ const Dashboard = () => {
                                     <Party api={api} trigger={"ward"} img={img} onClick={getPropData}/>
                                 :
                                     toggleKey === "d5" ?
-                                        <Result api={api} trigger={"consti"} img={img} onClick={getPropData}/>
+                                        <Stats api={api} trigger={"consti"} img={img} onClick={getPropData}/>
                                     :
                                         toggleKey === "d6" ?
                                             <Alarm api={api} trigger={"election"} img={img} onClick={getPropData}/>
