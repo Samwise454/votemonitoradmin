@@ -273,7 +273,7 @@ const Dash = (props) => {
         let data = {
             user: userData
         }
-        setLoading(true);
+          
 
         const fetchData = async () => {
             try {

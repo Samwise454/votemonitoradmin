@@ -17,10 +17,10 @@ const Stats = (props) => {
             <h2 className='mt-3 text-xl mb-3'>Statistics</h2>
 
             <div>
-                <h2 className='mt-4 font-semibold text-l mb-3 text-center'>State Wide</h2>
+                <h2 className='mt-4 font-semibold text-l mb-3 text-center'>Work In Progress...</h2>
 
                 <section className="statContainer shadow-sm rounded-md bg-white">
-                    
+
                 </section>
             </div>
         </div>
